@@ -2,7 +2,7 @@
 //  SwiftBitmask.h
 //  SwiftBitmask
 //
-//  Created by bryn austin bellomy on 2014 Nov 5.
+//  Created by bryn austin bellomy on 2014 Dec 15.
 //  Copyright (c) 2014 bryn austin bellomy. All rights reserved.
 //
 

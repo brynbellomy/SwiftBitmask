@@ -9,7 +9,7 @@ Pod::Spec.new do |s|
   s.homepage = 'https://github.com/brynbellomy/SwiftBitmask'
 
   s.platform = :osx, '10.10'
-  s.source_files = '*.{swift,m,h}'
+  s.source_files = 'Classes/*.swift'
 
   s.source = { :git => 'https://github.com/brynbellomy/SwiftBitmask.git', :tag => '0.0.1' }
 end
