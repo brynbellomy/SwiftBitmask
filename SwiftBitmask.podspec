@@ -2,7 +2,7 @@
 
 Pod::Spec.new do |s|
   s.name = 'SwiftBitmask'
-  s.version = '0.0.2'
+  s.version = '0.0.3'
   s.license = 'WTFPL'
   s.summary = 'Generic Bitmask utility type, written in Swift.'
   s.authors = { 'bryn austin bellomy' => 'bryn.bellomy@gmail.com' }
