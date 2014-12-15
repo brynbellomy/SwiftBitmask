@@ -87,7 +87,7 @@ let orValue       = (MonsterAttributes.Big | .Ugly).bitmaskValue // == UInt16(1 
 
 `Bitmask` also implements `NilLiteralConvertible` and `BooleanType`, which allow for concise conditionals:
 
-```
+```swift
 // Bitmask<T> implements BooleanType
 if simpleOr & MonsterAttributes.Scary {
     println("(boolean comparison) scary!")
@@ -118,23 +118,23 @@ if simpleOr ~= MonsterAttributes.Scary | .Big {
 
 You can write switch statements with `Bitmask` too, although in my experience playing around with this code so far, it almost never seems to be the control structure that makes the most sense.  If you insist upon trying it out, just be careful to add `fallthrough`s where appropriate and put your `case` statements in an order that makes sense for your application:
 
-```
+```swift
 switch simpleOr
 {
     case |MonsterAttributes.Big:
-        println("(switch comparison) big!")
+        println("big!")
         fallthrough
 
     case MonsterAttributes.Big | .Scary:
-        println("(switch comparison) either big or scary!")
+        println("either big or scary!")
         fallthrough
 
     case |MonsterAttributes.Ugly:
-        println("(switch comparison) ugly!")
+        println("ugly!")
         fallthrough
 
     case |MonsterAttributes.Scary:
-        println("(switch comparison) scary!")
+        println("scary!")
         fallthrough
 
     default:
