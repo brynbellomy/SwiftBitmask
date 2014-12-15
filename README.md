@@ -161,8 +161,8 @@ enum MonsterAttributes : String, IBitmaskRepresentable, IAutoBitmaskable
 
     static var autoBitmaskValues : [MonsterAttributes] = [.Big, .Ugly, .Scary,]
 
-    var  bitmaskValue: UInt16  { return Bitmask<UInt16>.autoBitmaskValueFor(self) }
-    init(bitmaskValue: UInt16) { self = Bitmask<UInt16>.autoValueFromBitmask(bitmaskValue) }
+    var  bitmaskValue: UInt16  { return AutoBitmask.autoBitmaskValueFor(self) }
+    init(bitmaskValue: UInt16) { self = AutoBitmask.autoValueFromBitmask(bitmaskValue) }
 }
 ```
 
