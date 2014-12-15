@@ -8,7 +8,8 @@ Pod::Spec.new do |s|
   s.authors = { 'bryn austin bellomy' => 'bryn.bellomy@gmail.com' }
   s.homepage = 'https://github.com/brynbellomy/SwiftBitmask'
 
-  s.platform = :osx, '10.10'
+  s.ios.deployment_target = '8.0'
+  s.osx.deployment_target = '10.10'
   s.source_files = 'Classes/*.swift'
 
   s.source = { :git => 'https://github.com/brynbellomy/SwiftBitmask.git', :tag => s.version }
