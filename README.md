@@ -6,20 +6,20 @@
 It allows you to use the simple, familiar syntax of Swift's bitwise operators (`|`, `&`, `~`, `^`, etc.) with any custom `struct`, `enum`, or `class` type.
 
 
-# Bitmask&lt;T&gt; with integer types
+# Bitmask&lt;T&gt; with raw integer types
 
 The `Bitmask` class takes a generic parameter indicating the type of integer you want to use to store the bitmask's raw value.  Code:
 
 ```swift
 let bitmask = Bitmask<UInt16>(1 << 2 | 1 << 5)
-bitmask.bitmaskValue  // returns (1 << 2 | 1 << 5) as a UInt16
+bitmask.bitmaskValue  // returns UInt16(1 << 2 | 1 << 5)
 ```
 
 ```swift
 let bitmaskA = Bitmask<UInt16>(1 << 2)
 let bitmaskB = Bitmask<UInt16>(1 << 5)
 let allTogetherNow = bitmaskA | bitmaskB
-bitmask.bitmaskValue  // also returns (1 << 2 | 1 << 5) as a UInt16, just like above
+bitmask.bitmaskValue  // also returns UInt16(1 << 2 | 1 << 5), just like above
 ```
 
 
@@ -39,7 +39,6 @@ public protocol IBitmaskRepresentable
 
 Just use any built-in integer type and it'll work.
 
-
 Here's a quick example of a type that implements `IBitmaskRepresentable`:
 
 ```swift
@@ -57,21 +56,67 @@ enum MonsterAttributes : UInt16, IBitmaskRepresentable
 }
 ```
 
+Now you can create a `Bitmask<MonsterAttributes>` and use it the same way you would use a `Bitmask` with a raw integer underlying type:
+
+```swift
+let b = Bitmask<MonsterAttributes>(.Big, .Scary)
+```
+
 
 # what does this get me?
+
+## concise syntax
 
 You can write code that's almost as concise as the syntax you would use for simple, integral bitwise operations, but with the improved type safety and versatility of doing so with your own custom type.  **Note that you almost never have to write Bitmask&lt;T&gt;**:
 
 ```swift
+// prefix operator initialization
+let bitmask = |MonsterAttributes.Scary         // == Bitmask(MonsterAttributes.Scary)
+
+// implicit initialization via bitwise operators
 let option : MonsterAttributes = .Ugly
 let orWithVar = option | .Big                 // == Bitmask<UInt16> with a bitmaskValue of 1 | 2
 let simpleOr  = MonsterAttributes.Big | .Ugly // == Bitmask<UInt16> with a bitmaskValue of 1 | 2
 
+// the raw bitmask value can be obtained with from the bitmaskValue property
 let simpleOrValue = simpleOr.bitmaskValue                        // == UInt16(1 | 2)
 let orValue       = (MonsterAttributes.Big | .Ugly).bitmaskValue // == UInt16(1 | 2)
 ```
 
-Switch statements work pretty well too, as long as you're careful to add `fallthrough`s and put your `case` statements in an order that makes sense.
+## if statements
+
+`Bitmask` also implements `NilLiteralConvertible` and `BooleanType`, which allow for concise conditionals:
+
+```
+// Bitmask<T> implements BooleanType
+if simpleOr & MonsterAttributes.Scary {
+    println("(boolean comparison) scary!")
+}
+
+// Bitmask<T> implements NilLiteralConvertible
+if simpleOr & MonsterAttributes.Scary != nil {
+    println("(nil literal comparison) scary!")
+}
+```
+
+
+## pattern matching + switch
+
+`Bitmask` can tango with the pattern-matching operator (`~=`), which is basically equivalent to checking if bits are set using `&`:
+
+```swift
+// Bitmask<T> is compatible with ~=, the pattern-matching operator
+if simpleOr ~= MonsterAttributes.Scary {
+    println("(pattern matching operator) scary!")
+}
+
+if simpleOr ~= MonsterAttributes.Scary | .Big {
+    println("(pattern matching operator) either big or scary!")
+}
+```
+
+
+You can write switch statements with `Bitmask` too, although in my experience playing around with this code so far, it almost never seems to be the control structure that makes the most sense.  If you insist upon trying it out, just be careful to add `fallthrough`s where appropriate and put your `case` statements in an order that makes sense for your application:
 
 ```
 switch simpleOr
@@ -93,32 +138,7 @@ switch simpleOr
         fallthrough
 
     default:
-        println("(switch comparison) (default)")
-}
-```
-
-However, it still might make the most sense to use a series of `if` statements so that all of 
-
-```swift
-// Bitmask<T> is compatible with ~=, the pattern-matching operator
-if simpleOr ~= MonsterAttributes.Scary {
-    println("(pattern matching operator) scary!")
-}
-
-if simpleOr ~= MonsterAttributes.Scary | .Big {
-    println("(pattern matching operator) either big or scary!")
-}
-```
-
-```
-// Bitmask<T> implements NilLiteralConvertible
-if simpleOr & MonsterAttributes.Scary != nil {
-    println("(nil literal comparison) scary!")
-}
-
-// Bitmask<T> implements BooleanType
-if simpleOr & MonsterAttributes.Scary {
-    println("(boolean comparison) scary!")
+        // ...
 }
 ```
 

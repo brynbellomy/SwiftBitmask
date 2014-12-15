@@ -27,7 +27,22 @@ class SwiftBitmaskTests: XCTestCase
 {
     let bitmask = MonsterAttributes.Ugly | .Scary
 
-    func testConciseAssignmentPrefixOperator()
+    func testRawTypes() {
+        let rawBitmask = Bitmask<UInt16>(12)
+        XCTAssert(rawBitmask.bitmaskValue == 12)
+    }
+
+    func testSplatConstructor() {
+        let b = Bitmask<MonsterAttributes>(.Big, .Scary)
+        XCTAssert(b.bitmaskValue == MonsterAttributes.Big.bitmaskValue | MonsterAttributes.Scary.bitmaskValue)
+    }
+
+    func testArrayConstructor() {
+        let b = Bitmask<MonsterAttributes>([.Big, .Scary])
+        XCTAssert(b.bitmaskValue == MonsterAttributes.Big.bitmaskValue | MonsterAttributes.Scary.bitmaskValue)
+    }
+
+    func testPrefixOperatorConstructor()
     {
         let singleValue = |MonsterAttributes.Ugly
         XCTAssert(singleValue.bitmaskValue == MonsterAttributes.Ugly.bitmaskValue)
