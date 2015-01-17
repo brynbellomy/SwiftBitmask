@@ -1,6 +1,13 @@
 
 # a replacement for NS_OPTIONS / RawOptionSet
 
+[![Build Status](https://travis-ci.org/brynbellomy/SwiftBitmask.svg?branch=master)](https://travis-ci.org/brynbellomy/SwiftBitmask)
+[![CocoaPods](https://img.shields.io/cocoapods/v/SwiftBitmask.svg?style=flat)](http://cocoadocs.org/docsets/SwiftBitmask)
+[![CocoaPods](https://img.shields.io/cocoapods/p/SwiftBitmask.svg?style=flat)](http://cocoadocs.org/docsets/SwiftBitmask)
+[![CocoaPods](https://img.shields.io/cocoapods/l/SwiftBitmask.svg?style=flat)](http://cocoadocs.org/docsets/SwiftBitmask)
+[![GitHub tag](https://img.shields.io/github/tag/brynbellomy/SwiftBitmask.svg?style=flat)]()
+
+
 `Bitmask<T>` is a quicker way to get `NS_OPTIONS`-style functionality in a Swift environment.  It's intended a replacement for Swift's `RawOptionSet`, which is so long and arduous to implement that [someone wrote a code generator for it](http://natecook.com/blog/2014/07/swift-options-bitmask-generator/).
 
 It allows you to use the simple, familiar syntax of Swift's bitwise operators (`|`, `&`, `~`, `^`, etc.) with any custom `struct`, `enum`, or `class` type by wrapping that type in a `Bitmask<T>`.
