@@ -1,4 +1,12 @@
-language: objective-c
 
+language: objective-c
+osx_image: xcode61
 script:
-  - bundle exec rake default
+    - xctool -project SwiftGraphics.xcodeproj -scheme SwiftGraphics_OSX build test
+    # - xctool -project SwiftGraphics.xcodeproj -scheme SwiftGraphics_iOS -sdk iphonesimulator build test
+
+
+# language: objective-c
+#
+# script:
+#   - bundle exec rake default
