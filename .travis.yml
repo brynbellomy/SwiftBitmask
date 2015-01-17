@@ -2,8 +2,8 @@
 language: objective-c
 osx_image: xcode61
 script:
-    - xctool -project SwiftGraphics.xcodeproj -scheme SwiftGraphics_OSX build test
-    # - xctool -project SwiftGraphics.xcodeproj -scheme SwiftGraphics_iOS -sdk iphonesimulator build test
+    - xctool -workspace SwiftBitmask.xcworkspace -scheme SwiftBitmask build test
+    # - xctool -workspace SwiftBitmask.xcworkspace -scheme SwiftBitmask_iOS -sdk iphonesimulator build test
 
 
 # language: objective-c
