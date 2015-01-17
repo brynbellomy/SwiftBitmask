@@ -10,13 +10,11 @@ import Cocoa
 import XCTest
 import SwiftBitmask
 
-enum MonsterAttributes : UInt16, IBitmaskRepresentable
+private enum MonsterAttributes : UInt16, IBitmaskRepresentable
 {
     case Big   = 1
     case Ugly  = 2
     case Scary = 4
-
-    static var autoBitmaskValues : [MonsterAttributes] = [.Big, .Ugly, .Scary,]
 
     var bitmaskValue:  UInt16  { return rawValue }
     init(bitmaskValue: UInt16) { self.init(rawValue: bitmaskValue) }
@@ -25,7 +23,7 @@ enum MonsterAttributes : UInt16, IBitmaskRepresentable
 
 class SwiftBitmaskTests: XCTestCase
 {
-    let bitmask = MonsterAttributes.Ugly | .Scary
+    private let bitmask = MonsterAttributes.Ugly | .Scary
 
     func testRawTypes() {
         let rawBitmask = Bitmask<UInt16>(12)
@@ -33,12 +31,12 @@ class SwiftBitmaskTests: XCTestCase
     }
 
     func testSplatConstructor() {
-        let b = Bitmask<MonsterAttributes>(.Big, .Scary)
+        let b = Bitmask(MonsterAttributes.Big, .Scary)
         XCTAssert(b.bitmaskValue == MonsterAttributes.Big.bitmaskValue | MonsterAttributes.Scary.bitmaskValue)
     }
 
     func testArrayConstructor() {
-        let b = Bitmask<MonsterAttributes>([.Big, .Scary])
+        let b = Bitmask([MonsterAttributes.Big, .Scary])
         XCTAssert(b.bitmaskValue == MonsterAttributes.Big.bitmaskValue | MonsterAttributes.Scary.bitmaskValue)
     }
 

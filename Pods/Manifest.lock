@@ -1,0 +1,39 @@
+PODS:
+  - Funky (0.0.1):
+    - LlamaKit
+  - LlamaKit (0.5.0)
+  - SwiftDataStructures (0.0.4)
+  - SwiftyJSON (2.1.1)
+
+DEPENDENCIES:
+  - Funky (from `~/projects/_swift/Funky`)
+  - LlamaKit (from `https://github.com/LlamaKit/LlamaKit`)
+  - SwiftDataStructures (from `~/projects/_swift/SwiftDataStructures`)
+  - SwiftyJSON (from `https://github.com/orta/SwiftyJSON`, branch `podspec`)
+
+EXTERNAL SOURCES:
+  Funky:
+    :path: ~/projects/_swift/Funky
+  LlamaKit:
+    :git: https://github.com/LlamaKit/LlamaKit
+  SwiftDataStructures:
+    :path: ~/projects/_swift/SwiftDataStructures
+  SwiftyJSON:
+    :branch: podspec
+    :git: https://github.com/orta/SwiftyJSON
+
+CHECKOUT OPTIONS:
+  LlamaKit:
+    :commit: 438bdd85f0035f01f68f1d13d980b2022b61acae
+    :git: https://github.com/LlamaKit/LlamaKit
+  SwiftyJSON:
+    :commit: 252838693668023571c46f56d7ea8347e6948d1b
+    :git: https://github.com/orta/SwiftyJSON
+
+SPEC CHECKSUMS:
+  Funky: 63cd017e00f261785713d9224fdee496d974b79d
+  LlamaKit: 6110b5eb82c3286ee0a5bbd2157e736ab9822c44
+  SwiftDataStructures: c21bb2642106e9b4b580ae5f9972b1ba91492e69
+  SwiftyJSON: 626bbe0ede796bf69e849b7aa7473778b03fe44c
+
+COCOAPODS: 0.36.0.beta.1

@@ -11,13 +11,13 @@ import XCTest
 import SwiftBitmask
 
 
-enum AutoMonsterAttributes : String, IBitmaskRepresentable, IAutoBitmaskable
+private enum MonsterAttributes : String, IBitmaskRepresentable, IAutoBitmaskable
 {
     case Big = "big"
     case Ugly = "ugly"
     case Scary = "scary"
 
-    static var autoBitmaskValues : [AutoMonsterAttributes] = [.Big, .Ugly, .Scary,]
+    static var autoBitmaskValues : [MonsterAttributes] = [.Big, .Ugly, .Scary,]
 
     var bitmaskValue:  UInt16  { return AutoBitmask.autoBitmaskValueFor(self) }
     init(bitmaskValue: UInt16) { self = AutoBitmask.autoValueFromBitmask(bitmaskValue) }
@@ -28,21 +28,21 @@ class AutoBitmaskTests: XCTestCase
 {
     func testAutoBitmaskAlgorithmicValues()
     {
-        var index = find(AutoMonsterAttributes.autoBitmaskValues, AutoMonsterAttributes.Big)!
-        XCTAssert(AutoMonsterAttributes.Big.bitmaskValue == UInt16(1 << index))
+        var index = find(MonsterAttributes.autoBitmaskValues, MonsterAttributes.Big)!
+        XCTAssert(MonsterAttributes.Big.bitmaskValue == UInt16(1 << index))
 
-        index = find(AutoMonsterAttributes.autoBitmaskValues, AutoMonsterAttributes.Ugly)!
-        XCTAssert(AutoMonsterAttributes.Ugly.bitmaskValue == UInt16(1 << index))
+        index = find(MonsterAttributes.autoBitmaskValues, MonsterAttributes.Ugly)!
+        XCTAssert(MonsterAttributes.Ugly.bitmaskValue == UInt16(1 << index))
 
-        index = find(AutoMonsterAttributes.autoBitmaskValues, AutoMonsterAttributes.Scary)!
-        XCTAssert(AutoMonsterAttributes.Scary.bitmaskValue == UInt16(1 << index))
+        index = find(MonsterAttributes.autoBitmaskValues, MonsterAttributes.Scary)!
+        XCTAssert(MonsterAttributes.Scary.bitmaskValue == UInt16(1 << index))
     }
 
     func testAutoBitmaskConcreteValues()
     {
-        XCTAssert(AutoMonsterAttributes.Big.bitmaskValue == 1)
-        XCTAssert(AutoMonsterAttributes.Ugly.bitmaskValue == 2)
-        XCTAssert(AutoMonsterAttributes.Scary.bitmaskValue == 4)
+        XCTAssert(MonsterAttributes.Big.bitmaskValue == 1)
+        XCTAssert(MonsterAttributes.Ugly.bitmaskValue == 2)
+        XCTAssert(MonsterAttributes.Scary.bitmaskValue == 4)
     }
 }
 

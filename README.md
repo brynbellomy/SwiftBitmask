@@ -1,9 +1,9 @@
 
-# a replacement for RawOptionSet
+# a replacement for NS_OPTIONS / RawOptionSet
 
-`Bitmask<T>` is intended as a replacement for Swift's `RawOptionSet`, which is so long and arduous to implement that [someone wrote a code generator for it](http://natecook.com/blog/2014/07/swift-options-bitmask-generator/).
+`Bitmask<T>` is a quicker way to get `NS_OPTIONS`-style functionality in a Swift environment.  It's intended a replacement for Swift's `RawOptionSet`, which is so long and arduous to implement that [someone wrote a code generator for it](http://natecook.com/blog/2014/07/swift-options-bitmask-generator/).
 
-It allows you to use the simple, familiar syntax of Swift's bitwise operators (`|`, `&`, `~`, `^`, etc.) with any custom `struct`, `enum`, or `class` type.
+It allows you to use the simple, familiar syntax of Swift's bitwise operators (`|`, `&`, `~`, `^`, etc.) with any custom `struct`, `enum`, or `class` type by wrapping that type in a `Bitmask<T>`.
 
 
 # Bitmask&lt;T&gt; with raw integer types
