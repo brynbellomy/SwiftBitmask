@@ -12,6 +12,23 @@
 
 It allows you to use the simple, familiar syntax of Swift's bitwise operators (`|`, `&`, `~`, `^`, etc.) with any custom `struct`, `enum`, or `class` type by wrapping that type in a `Bitmask<T>`.
 
+## install 
+
+It's a [CocoaPod](http://cocoapods.org).  For the time being, only the pre-release beta of CocoaPods 0.36 is capable of working with Swift code.  To install it, use `gem install cocoapods --pre`.
+
+Podfile:
+
+```
+pod 'SwiftBitmask'
+```
+
+Command line:
+
+```sh
+$ pod install
+```
+
+
 
 # Bitmask&lt;T&gt; with raw integer types
 
