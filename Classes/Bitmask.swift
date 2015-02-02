@@ -78,7 +78,7 @@ extension Bitmask: IBitmaskRepresentable
 {
     public init <U: IBitmaskRepresentable> (_ vals: [U])
     {
-        let arr = vals |> mapr { $0.bitmaskValue as T.BitmaskRawType }
+        let arr = vals |> map‡ { $0.bitmaskValue as T.BitmaskRawType }
         self.init(arr)
     }
 }
