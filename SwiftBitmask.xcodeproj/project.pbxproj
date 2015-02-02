@@ -15,6 +15,7 @@
 		C55045221A3F49990057378F /* AutoBitmask.swift in Sources */ = {isa = PBXBuildFile; fileRef = C55045201A3F49990057378F /* AutoBitmask.swift */; };
 		C55045231A3F49990057378F /* Bitmask.swift in Sources */ = {isa = PBXBuildFile; fileRef = C55045211A3F49990057378F /* Bitmask.swift */; };
 		C55045251A3F4A530057378F /* AutoBitmaskTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C55045241A3F4A530057378F /* AutoBitmaskTests.swift */; };
+		C5FA684A1A7F08E6001BDF09 /* OptionSetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5FA68491A7F08E6001BDF09 /* OptionSetView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -40,6 +41,7 @@
 		C55045201A3F49990057378F /* AutoBitmask.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AutoBitmask.swift; sourceTree = "<group>"; };
 		C55045211A3F49990057378F /* Bitmask.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Bitmask.swift; sourceTree = "<group>"; };
 		C55045241A3F4A530057378F /* AutoBitmaskTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AutoBitmaskTests.swift; sourceTree = "<group>"; };
+		C5FA68491A7F08E6001BDF09 /* OptionSetView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OptionSetView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -141,6 +143,7 @@
 			children = (
 				C55045201A3F49990057378F /* AutoBitmask.swift */,
 				C55045211A3F49990057378F /* Bitmask.swift */,
+				C5FA68491A7F08E6001BDF09 /* OptionSetView.swift */,
 			);
 			path = Classes;
 			sourceTree = SOURCE_ROOT;
@@ -352,6 +355,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				C55045221A3F49990057378F /* AutoBitmask.swift in Sources */,
+				C5FA684A1A7F08E6001BDF09 /* OptionSetView.swift in Sources */,
 				C55045231A3F49990057378F /* Bitmask.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

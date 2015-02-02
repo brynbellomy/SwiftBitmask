@@ -10,7 +10,7 @@ import Foundation
 import Funky
 
 
-public protocol IBitmaskRepresentable
+public protocol IBitmaskRepresentable: Equatable
 {
     typealias BitmaskRawType: IBitmaskRawType
     var bitmaskValue: BitmaskRawType { get }
@@ -46,7 +46,7 @@ public struct Bitmask <T: IBitmaskRepresentable> : BitwiseOperationsType
 
     public mutating func setValue(val: [T])
     {
-        val |> mapr { $0.bitmaskValue }
+        val |> map‡ { $0.bitmaskValue }
             |> reducer(T.BitmaskRawType.allZeros) { $0 | $1 }
             |> setValue
     }
@@ -62,6 +62,15 @@ public struct Bitmask <T: IBitmaskRepresentable> : BitwiseOperationsType
         val |> mapr { $0.bitmaskValue }
             |> setValue
     }
+
+    public func isSet(val:T) -> Bool {
+        return (self & val) == val
+    }
+
+    // @@TODO: option set
+//    public func asOptionSet() -> OptionSetView<T> {
+//        return OptionSetView(bitmask: self)
+//    }
 }
 
 
@@ -84,6 +93,14 @@ extension Bitmask: Equatable {}
 
 public func == <T> (lhs:Bitmask<T>, rhs:Bitmask<T>) -> Bool {
     return lhs.bitmaskValue == rhs.bitmaskValue
+}
+
+public func == <T> (lhs:Bitmask<T>, rhs:T) -> Bool {
+    return lhs.bitmaskValue == rhs.bitmaskValue
+}
+
+public func == <T> (lhs:Bitmask<T>, rhs:T.BitmaskRawType) -> Bool {
+    return lhs.bitmaskValue == rhs
 }
 
 
