@@ -10,14 +10,14 @@ import Cocoa
 import XCTest
 import SwiftBitmask
 
-private enum MonsterAttributes : UInt16, IBitmaskRepresentable
+private enum MonsterAttributes: UInt16, IBitmaskRepresentable
 {
     case Big   = 1
     case Ugly  = 2
     case Scary = 4
 
-    var bitmaskValue:  UInt16  { return rawValue }
-    init(bitmaskValue: UInt16) { self.init(rawValue: bitmaskValue) }
+    var bitmaskValue:   UInt16  { return rawValue }
+    init?(bitmaskValue: UInt16) { self.init(rawValue: bitmaskValue) }
 }
 
 
@@ -63,6 +63,11 @@ class SwiftBitmaskTests: XCTestCase
         XCTAssertTrue(bitmask.isSet(.Ugly))
         XCTAssertTrue(bitmask.isSet(.Scary))
         XCTAssertFalse(bitmask.isSet(.Big))
+    }
+    
+    func testAreSet() {
+        XCTAssertTrue(bitmask.areSet(.Ugly, .Scary))
+        XCTAssertFalse(bitmask.areSet(.Ugly, .Big))
     }
 
     func testLogicalOr() {

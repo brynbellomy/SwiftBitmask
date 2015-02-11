@@ -85,6 +85,7 @@
 		C55044F91A3F49110057378F = {
 			isa = PBXGroup;
 			children = (
+				C550451F1A3F49990057378F /* Classes */,
 				C55045051A3F49110057378F /* SwiftBitmask */,
 				C55045121A3F49110057378F /* SwiftBitmaskTests */,
 				C55045041A3F49110057378F /* Products */,
@@ -105,7 +106,6 @@
 		C55045051A3F49110057378F /* SwiftBitmask */ = {
 			isa = PBXGroup;
 			children = (
-				C550451F1A3F49990057378F /* Classes */,
 				C55045081A3F49110057378F /* SwiftBitmask.h */,
 				C55045061A3F49110057378F /* Supporting Files */,
 			);

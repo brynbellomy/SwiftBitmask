@@ -10,7 +10,7 @@ import Foundation
 import Funky
 
 
-public protocol IBitmaskRepresentable: Equatable
+public protocol IBitmaskRepresentable: Equatable, Hashable
 {
     typealias BitmaskRawType: IBitmaskRawType
     var bitmaskValue: BitmaskRawType { get }
@@ -20,6 +20,7 @@ public protocol IBitmaskRepresentable: Equatable
 public protocol IBitmaskRawType: BitwiseOperationsType, Equatable, Comparable
 {
     init(_ v:Int)
+    var integerValue: Int { get set }
 }
 
 
@@ -28,6 +29,8 @@ public struct Bitmask <T: IBitmaskRepresentable> : BitwiseOperationsType
     public typealias BitmaskRawType = T.BitmaskRawType
 
     public private(set) var bitmaskValue: BitmaskRawType = BitmaskRawType.allZeros
+    
+    public var hashValue: Int { return bitmaskValue.integerValue }
 
     public static var allZeros: Bitmask<T> { return Bitmask(T.BitmaskRawType.allZeros)  }
     public var isAllZeros: Bool { return self == Bitmask.allZeros }
@@ -66,11 +69,11 @@ public struct Bitmask <T: IBitmaskRepresentable> : BitwiseOperationsType
     public func isSet(val:T) -> Bool {
         return (self & val) == val
     }
-
-    // @@TODO: option set
-//    public func asOptionSet() -> OptionSetView<T> {
-//        return OptionSetView(bitmask: self)
-//    }
+    
+    public func areSet(options:T...) -> Bool {
+        let otherBitmask = Bitmask(options)
+        return (self & otherBitmask).bitmaskValue == otherBitmask.bitmaskValue
+    }
 }
 
 
@@ -78,7 +81,7 @@ extension Bitmask: IBitmaskRepresentable
 {
     public init <U: IBitmaskRepresentable> (_ vals: [U])
     {
-        let arr = vals |> map‡ { $0.bitmaskValue as T.BitmaskRawType }
+        let arr = vals |> map‡ { $0.bitmaskValue as! T.BitmaskRawType }
         self.init(arr)
     }
 }
@@ -223,33 +226,74 @@ public func ~=<T: IBitmaskRepresentable> (pattern: T, value: Bitmask<T>) -> Bool
 
 extension Int: IBitmaskRepresentable, IBitmaskRawType {
     public var bitmaskValue: Int { return self }
+    public var integerValue: Int {
+        get { return self }
+        set { self = newValue }
+    }
 }
+
 extension Int8: IBitmaskRepresentable, IBitmaskRawType {
     public var bitmaskValue: Int8 { return self }
+    public var integerValue: Int {
+        get { return numericCast(self) }
+        set { self = numericCast(newValue) }
+    }
 }
 extension Int16: IBitmaskRepresentable, IBitmaskRawType {
     public var bitmaskValue: Int16 { return self }
+    public var integerValue: Int {
+        get { return numericCast(self) }
+        set { self = numericCast(newValue) }
+    }
 }
 extension Int32: IBitmaskRepresentable, IBitmaskRawType {
     public var bitmaskValue: Int32 { return self }
+    public var integerValue: Int {
+        get { return numericCast(self) }
+        set { self = numericCast(newValue) }
+    }
 }
 extension Int64: IBitmaskRepresentable, IBitmaskRawType {
     public var bitmaskValue: Int64 { return self }
+    public var integerValue: Int {
+        get { return numericCast(self) }
+        set { self = numericCast(newValue) }
+    }
 }
 extension UInt: IBitmaskRepresentable, IBitmaskRawType {
     public var bitmaskValue: UInt { return self }
+    public var integerValue: Int {
+        get { return numericCast(self) }
+        set { self = numericCast(newValue) }
+    }
 }
 extension UInt8: IBitmaskRepresentable, IBitmaskRawType {
     public var bitmaskValue: UInt8 { return self }
+    public var integerValue: Int {
+        get { return numericCast(self) }
+        set { self = numericCast(newValue) }
+    }
 }
 extension UInt16: IBitmaskRepresentable, IBitmaskRawType {
     public var bitmaskValue: UInt16 { return self }
+    public var integerValue: Int {
+        get { return numericCast(self) }
+        set { self = numericCast(newValue) }
+    }
 }
 extension UInt32: IBitmaskRepresentable, IBitmaskRawType {
     public var bitmaskValue: UInt32 { return self }
+    public var integerValue: Int {
+        get { return numericCast(self) }
+        set { self = numericCast(newValue) }
+    }
 }
 extension UInt64: IBitmaskRepresentable, IBitmaskRawType {
     public var bitmaskValue: UInt64 { return self }
+    public var integerValue: Int {
+        get { return numericCast(self) }
+        set { self = numericCast(newValue) }
+    }
 }
 
 

@@ -105,7 +105,7 @@ public func != <T: Equatable>(lhs: Result<T>, rhs: Result<T>) -> Bool {
 /// Failure coalescing
 ///    .Success(Box(42)) ?? 0 ==> 42
 ///    .Failure(NSError()) ?? 0 ==> 0
-public func ??<T>(result: Result<T>, defaultValue: @autoclosure () -> T) -> T {
+public func ??<T>(result: Result<T>, @autoclosure defaultValue:  () -> T) -> T {
   switch result {
   case .Success(let value):
     return value.unbox

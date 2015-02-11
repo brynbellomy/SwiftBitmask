@@ -32,6 +32,9 @@ install_framework()
   for lib in $swift_runtime_libs; do
     echo "rsync -av \"${SWIFT_STDLIB_PATH}/${lib}\" \"${destination}\""
     rsync -av "${SWIFT_STDLIB_PATH}/${lib}" "${destination}"
+    if [ "${CODE_SIGNING_REQUIRED}" == "YES" ]; then
+      code_sign "${destination}/${lib}"
+    fi
   done
 }
 
@@ -48,11 +51,9 @@ if [[ "$CONFIGURATION" == "Debug" ]]; then
   install_framework 'Funky.framework'
   install_framework 'LlamaKit.framework'
   install_framework 'SwiftDataStructures.framework'
-  install_framework 'SwiftyJSON.framework'
 fi
 if [[ "$CONFIGURATION" == "Release" ]]; then
   install_framework 'Funky.framework'
   install_framework 'LlamaKit.framework'
   install_framework 'SwiftDataStructures.framework'
-  install_framework 'SwiftyJSON.framework'
 fi

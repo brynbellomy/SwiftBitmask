@@ -12,7 +12,7 @@ import Funky
 
 public protocol IAutoBitmaskable: Equatable
 {
-    class var autoBitmaskValues: [Self] { get }
+    static var autoBitmaskValues: [Self] { get }
 }
 
 
@@ -27,7 +27,7 @@ public struct AutoBitmask
     public static func autoBitmaskValueFor <T: protocol<IAutoBitmaskable, IBitmaskRepresentable>>
         (autoBitmaskable:T) -> T.BitmaskRawType
     {
-        if let index = find(T.autoBitmaskValues, autoBitmaskable)? {
+        if let index = find(T.autoBitmaskValues, autoBitmaskable) {
             return T.BitmaskRawType(1 << index)
         }
         else { preconditionFailure("Attempted to call autoBitmaskValueFor(_:) with a non-bitmaskable value of T.") }
