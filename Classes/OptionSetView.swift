@@ -7,13 +7,39 @@
 //
 
 import Foundation
+import Funky
 
 
-public struct OptionSetView <T: IBitmaskRepresentable>
+///
+/// Curried version of the `OptionSetView` constructor.
+///  
+/// For example: `bitmask |> asOptionSet([.First, .Second, .Third])`
+///
+public func asOptionSet <T: IBitmaskRepresentable where T: Hashable>
+    (possibleOptions:Set<T>) (bitmask:Bitmask<T>) -> OptionSetView<T>
+{
+    return OptionSetView(bitmask:bitmask, possibleOptions:possibleOptions)
+}
+
+
+/**
+    A representation of a finite set of options (or flags), some of which are set (flagged).
+    A `Bitmask<T>` can be converted to an `OptionSetView<T>`.
+ */
+public struct OptionSetView <T: IBitmaskRepresentable where T: Hashable>
 {
     let bitmask: Bitmask<T>
-    public init(bitmask b: Bitmask<T>) {
+    let possibleOptions: Set<T>
+    let options: Set<T>
+    
+    public init(bitmask b: Bitmask<T>, possibleOptions po:Set<T>)
+    {
         bitmask = b
+        possibleOptions = po
+        
+        options = possibleOptions
+                    |> selectArray { b.isSet($0) }
+                    |> toSet
     }
 
     public func isSet(option:T) -> Bool {
@@ -30,15 +56,10 @@ public struct OptionSetView <T: IBitmaskRepresentable>
 // MARK: - OptionSetView: SequenceType
 //
 
-//extension OptionSetView: SequenceType
-//{
-//    public typealias Generator = GeneratorOf<T>
-//    public func generate() -> Generator
-//    {
-//        
-//        var generator = elements.generate()
-//        return GeneratorOf {
-//            return generator.next()?.item
-//        }
-//    }
-//}
+extension OptionSetView: SequenceType
+{
+    public func generate() -> GeneratorOf<T> {
+        var generator = options.generate()
+        return GeneratorOf { generator.next() }
+    }
+}
