@@ -1,7 +1,6 @@
 Pod::Spec.new do |s|
   s.name = 'SwiftBitmask'
-  s.version = '0.0.5'
-  s.license = 'WTFPL'
+  s.version = '0.1.0'
   s.summary = 'NS_OPTIONS for Swift (type-checked bitmask container).  Basically an easier-to-implement RawOptionSet.'
   s.authors = { 'bryn austin bellomy' => 'bryn.bellomy@gmail.com' }
   s.license = { :type => 'WTFPL', :file => 'LICENSE.md' }
