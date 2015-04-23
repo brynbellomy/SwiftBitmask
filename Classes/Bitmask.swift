@@ -62,7 +62,7 @@ public struct Bitmask <T: IBitmaskRepresentable> : BitwiseOperationsType
 
     public mutating func setValue(val: [Bitmask<T>])
     {
-        val |> mapr { $0.bitmaskValue }
+        val |> map‡ { $0.bitmaskValue }
             |> setValue
     }
 

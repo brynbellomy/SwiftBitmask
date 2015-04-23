@@ -12,7 +12,7 @@ Pod::Spec.new do |s|
   s.source_files = 'Classes/*.swift'
   s.requires_arc = true
 
-  s.dependency 'Funky', '0.1.2'
+  s.dependency 'Funky', '0.2.2'
 
   s.source = { :git => 'https://github.com/brynbellomy/SwiftBitmask.git', :tag => s.version }
 end

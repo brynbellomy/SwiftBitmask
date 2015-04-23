@@ -16,6 +16,11 @@ public func <~ (var lhs:ErrorIO, rhs:NSError) -> ErrorIO {
     return lhs
 }
 
+public func <~ (var lhs:ErrorIO, rhs:String) -> ErrorIO {
+    lhs.append(ErrorIO.defaultError(rhs))
+    return lhs
+}
+
 public func <~ (var lhs:ErrorIO, rhs:ErrorIO) -> ErrorIO {
     lhs.extend(rhs)
     return lhs

@@ -6,7 +6,6 @@
 //  Copyright (c) 2014 bryn austin bellomy. All rights reserved.
 //
 
-import LlamaKit
 
 infix operator >>> { associativity right precedence 170 }
 infix operator />> { associativity right precedence 170 }
@@ -37,37 +36,45 @@ public func >>> <T, U, V, W> (f: T -> U, g: (U, V) -> W) -> (T, V) -> W {
 }
 
 // MARK: - Left-to-right composition
-public func />> <T, U, V> (f: T -> Result<U>, g: U -> Result<V>) -> T -> Result<V> {
-    return {
-        f($0).flatMap { x in g(x) }
-    }
+public func />>
+    <T, U, V, E>
+    (f: T -> Result<U, E>, g: U -> Result<V, E>)
+    -> T -> Result<V, E>
+{
+    return { f($0).flatMap { x in g(x) } }
 }
 
-public func />> <T, U, V> (f: T -> Result<U>, g: Result<U> -> V) -> T -> V {
-    return {
-        g(f($0))
-    }
+public func />>
+    <T, U, V, E>
+    (f: T -> Result<U, E>, g: Result<U, E> -> V)
+    -> T -> V
+{
+    return { g(f($0)) }
 }
 
-public func />> <T, U, V> (f: T -> Result<U>, g: U -> V) -> T -> Result<V> {
-    return {
-        f($0).flatMap { x in success(g(x)) }
-    }
+public func />>
+    <T, U, V, E>
+    (f: T -> Result<U, E>, g: U -> V)
+    -> T -> Result<V, E>
+{
+    return { f($0).flatMap { x in success(g(x)) } }
 }
 
-public func >>> <T, U> (f: T -> U, g: U -> Void) -> T -> Void {
-    return {
-        f($0) |> g
-        return
-    }
+public func >>>
+    <T, U, E>
+    (f: T -> U, g: U -> Void)
+    -> T -> Void
+{
+    return { f($0) |> g }
 }
 
 
-public func |>> <T, U> (f: T -> Result<U>, g: Result<U> -> Void) -> T -> Void {
-    return {
-        f($0) |> g
-        return
-    }
+public func |>>
+    <T, U, E>
+    (f: T -> Result<U, E>, g: Result<U, E> -> Void)
+    -> T -> Void
+{
+    return { f($0) |> g }
 }
 
 

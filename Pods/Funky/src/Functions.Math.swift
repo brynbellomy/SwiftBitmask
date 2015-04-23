@@ -24,8 +24,7 @@ public func random(min: Float = 0, #max: Float) -> Float
 }
 
 
-public func sum
-    <S: SequenceType where S.Generator.Element: IntegerType>
+public func sum <S: SequenceType where S.Generator.Element: IntegerType>
     (nums: S) -> S.Generator.Element
 {
     return reduce(nums, 0) { $0.0 + $0.1 }

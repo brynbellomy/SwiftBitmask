@@ -1,24 +1,13 @@
 PODS:
-  - Funky (0.1.2):
-    - LlamaKit (= 0.1.1)
-  - LlamaKit (0.1.1)
-  - SwiftDataStructures (0.1.1):
-    - Funky (= 0.1.2)
+  - Funky (0.2.2):
+    - Regex (= 0.1.0)
+  - Regex (0.1.0)
 
 DEPENDENCIES:
-  - Funky (from `~/projects/_swift/Funky`)
-  - LlamaKit (= 0.1.1)
-  - SwiftDataStructures (from `~/projects/_swift/SwiftDataStructures`)
-
-EXTERNAL SOURCES:
-  Funky:
-    :path: ~/projects/_swift/Funky
-  SwiftDataStructures:
-    :path: ~/projects/_swift/SwiftDataStructures
+  - Funky (~> 0.2.2)
 
 SPEC CHECKSUMS:
-  Funky: d6069856ff95f004ff7e87df6fc7c923fa12f0e6
-  LlamaKit: 25f47a933b6580a6fc159d95adb2e2953c7012e9
-  SwiftDataStructures: e0b1e88c240aa1dbc7039aa4bb98c077b167c5d1
+  Funky: d974c297d2ddfdf6ddc54a7c4b59b0c16ef7e465
+  Regex: 7eb28abf34ed5718a34baa474892b0ddc4efb384
 
-COCOAPODS: 0.36.0.beta.2
+COCOAPODS: 0.37.0.beta.1
