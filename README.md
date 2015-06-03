@@ -8,21 +8,21 @@
 [![GitHub tag](https://img.shields.io/github/tag/brynbellomy/SwiftBitmask.svg?style=flat)]()
 
 
-`Bitmask<T>` is a quicker way to get `NS_OPTIONS`-style functionality in a Swift environment.  It's intended a replacement for Swift's `RawOptionSet`, which is so long and arduous to implement that [someone wrote a code generator for it](http://natecook.com/blog/2014/07/swift-options-bitmask-generator/).
+`Bitmask<T>` is a quicker way to get `NS_OPTIONS`-style functionality in a Swift environment.  It's intended as a replacement for Swift's `RawOptionSet`, which is so long and arduous to implement that [someone wrote a code generator for it](http://natecook.com/blog/2014/07/swift-options-bitmask-generator/).
 
 It allows you to use the simple, familiar syntax of Swift's bitwise operators (`|`, `&`, `~`, `^`, etc.) with any custom `struct`, `enum`, or `class` type by wrapping that type in a `Bitmask<T>`.
 
 ## install 
 
-It's a [CocoaPod](http://cocoapods.org).  For the time being, only the pre-release beta of CocoaPods 0.36 is capable of working with Swift code.  To install it, use `gem install cocoapods --pre`.
+Use [CocoaPods](https://cocoapods.org).
 
-Podfile:
+In your `Podfile`:
 
-```
+```ruby
 pod 'SwiftBitmask'
 ```
 
-Command line:
+And then from the command line:
 
 ```sh
 $ pod install
@@ -207,7 +207,7 @@ However, if you have a use case that would benefit from implementing `Bitmask` a
 
 # license
 
-WTFPL
+ISC
 
 
 # authors / contributors

@@ -1,9 +1,9 @@
 Pod::Spec.new do |s|
   s.name = 'SwiftBitmask'
-  s.version = '0.1.0'
+  s.version = '0.1.1'
   s.summary = 'NS_OPTIONS for Swift (type-checked bitmask container).  Basically an easier-to-implement RawOptionSet.'
   s.authors = { 'bryn austin bellomy' => 'bryn.bellomy@gmail.com' }
-  s.license = { :type => 'WTFPL', :file => 'LICENSE.md' }
+  s.license = { :type => 'MIT', :file => 'LICENSE.md' }
   s.homepage = 'https://github.com/brynbellomy/SwiftBitmask'
 
   s.ios.deployment_target = '8.0'
