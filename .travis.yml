@@ -1,9 +1,6 @@
 
 language: objective-c
-osx_image: xcode63
+osx_image: beta-xcode6.3
 script:
     - xctool build test
-    # - xctool -workspace SwiftBitmask.xcworkspace -scheme SwiftBitmask build test
-    # - xctool -workspace SwiftBitmask.xcworkspace -scheme SwiftBitmask_iOS -sdk iphonesimulator build test
-
 
