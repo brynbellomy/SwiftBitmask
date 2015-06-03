@@ -1,7 +1,7 @@
 
 # a replacement for NS_OPTIONS / RawOptionSet
 
-[![Build Status](https://travis-ci.org/brynbellomy/SwiftBitmask.svg?branch=master)](https://travis-ci.org/brynbellomy/SwiftBitmask)
+[![Build Status](https://travis-ci.org/brynbellomy/SwiftBitmask.svg?branch=0.1.1)](https://travis-ci.org/brynbellomy/SwiftBitmask)
 [![CocoaPods](https://img.shields.io/cocoapods/v/SwiftBitmask.svg?style=flat)](http://cocoadocs.org/docsets/SwiftBitmask)
 [![CocoaPods](https://img.shields.io/cocoapods/p/SwiftBitmask.svg?style=flat)](http://cocoadocs.org/docsets/SwiftBitmask)
 [![CocoaPods](https://img.shields.io/cocoapods/l/SwiftBitmask.svg?style=flat)](http://cocoadocs.org/docsets/SwiftBitmask)
