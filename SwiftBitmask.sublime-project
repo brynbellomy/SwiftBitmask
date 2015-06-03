@@ -1,6 +1,8 @@
 {   "folders": [
      {   "path": ".",
-         "name": "SwiftBitmask" }
+         "name": "SwiftBitmask" },
+     {   "path": "./Classes",
+         "name": "src" }
      ]
  }
 
