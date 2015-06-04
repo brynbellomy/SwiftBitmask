@@ -3,4 +3,8 @@ language: objective-c
 osx_image: beta-xcode6.3
 script:
     - xctool build test
+before_install:
+    pip install codecov
+after_success:
+    codecov
 
