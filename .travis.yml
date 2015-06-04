@@ -2,9 +2,7 @@
 language: objective-c
 osx_image: beta-xcode6.3
 script:
-    - xctool build test
-before_install:
-    pip install codecov
+    - xctool build test GCC_INSTRUMENT_PROGRAM_FLOW_ARCS=YES GCC_GENERATE_TEST_COVERAGE_FILES=YES
 after_success:
-    codecov
+    - bash <(curl -s https://codecov.io/bash)
 
