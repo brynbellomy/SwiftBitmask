@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		6874609D92109F50B0D56EB3 /* Pods_SwiftBitmask.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2C2B6D88709CAEE03D1A309B /* Pods_SwiftBitmask.framework */; };
-		B3A753B8AE09B7BCD80D63D3 /* Pods.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8E7E860EDC9D322BAB24E9C5 /* Pods.framework */; };
 		C55045091A3F49110057378F /* SwiftBitmask.h in Headers */ = {isa = PBXBuildFile; fileRef = C55045081A3F49110057378F /* SwiftBitmask.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C550450F1A3F49110057378F /* SwiftBitmask.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C55045031A3F49110057378F /* SwiftBitmask.framework */; };
 		C55045161A3F49110057378F /* SwiftBitmaskTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C55045151A3F49110057378F /* SwiftBitmaskTests.swift */; };
@@ -50,7 +49,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B3A753B8AE09B7BCD80D63D3 /* Pods.framework in Frameworks */,
 				6874609D92109F50B0D56EB3 /* Pods_SwiftBitmask.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
