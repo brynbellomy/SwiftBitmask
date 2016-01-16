@@ -1,0 +1,13 @@
+PODS:
+  - Funky (0.2.2):
+    - Regex (= 0.1.0)
+  - Regex (0.1.0)
+
+DEPENDENCIES:
+  - Funky (~> 0.2.2)
+
+SPEC CHECKSUMS:
+  Funky: d974c297d2ddfdf6ddc54a7c4b59b0c16ef7e465
+  Regex: 7eb28abf34ed5718a34baa474892b0ddc4efb384
+
+COCOAPODS: 0.37.0.beta.1

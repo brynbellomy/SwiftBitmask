@@ -1,0 +1,90 @@
+AutoBitmask.swift
+	public protocol IAutoBitmaskable: Equatable
+	static var autoBitmaskValues: [Self] { get }
+	public static func autoBitmaskValueFor <T: protocol<IAutoBitmaskable, IBitmaskRepresentable>>
+        (autoBitmaskable:T) -> T.BitmaskRawType
+	public static func autoValueFromBitmask <T: protocol<IAutoBitmaskable, IBitmaskRepresentable>>
+        (bitmaskValue:T.BitmaskRawType) -> T
+OptionSetView.swift
+	public init(bitmask b: Bitmask<T>, possibleOptions po:Set<T>)
+	public func isSet(option:T) -> Bool
+	public func areSet(options:T...) -> Bool
+	public func generate() -> AnyGenerator<T>
+Bitmask.swift
+	public protocol IBitmaskRepresentable: Equatable, Hashable
+	var bitmaskValue: BitmaskRawType { get }
+	public protocol IBitmaskRawType: BitwiseOperationsType, Equatable, Comparable
+	init(_ v:Int)
+	var integerValue: Int { get set }
+	public struct Bitmask <T: IBitmaskRepresentable> : BitwiseOperationsType
+	public private(set) var bitmaskValue: BitmaskRawType = BitmaskRawType.allZeros
+	public var hashValue: Int { return bitmaskValue.integerValue }
+	public static var allZeros: Bitmask<T> { return Bitmask(T.BitmaskRawType.allZeros)  }
+	public var isAllZeros: Bool { return self == Bitmask.allZeros }
+	public init() {}
+	public init(_ val: T.BitmaskRawType)        { setValue(val) }
+	public init(_ val: [T])                     { setValue(val) }
+	public init(_ val: T...)                    { setValue(val) }
+	public init(_ val: [T.BitmaskRawType])      { setValue(val) }
+	public init(_ val: T.BitmaskRawType...)     { setValue(val) }
+	public init(_ val: Bitmask<T>...)           { setValue(val) }
+	public mutating func setValue(val: T)                { bitmaskValue = val.bitmaskValue }
+	public mutating func setValue(val: T.BitmaskRawType) { bitmaskValue = val }
+	public mutating func setValue(val: [T])
+	public mutating func setValue(val: [T.BitmaskRawType])
+	public mutating func setValue(val: [Bitmask<T>])
+	public func isSet(val:T) -> Bool
+	public func areSet(options:T...) -> Bool
+	public struct Bitmask&lt;T : IBitmaskRepresentable&gt; : BitwiseOperationsType
+	public init <U: IBitmaskRepresentable> (_ vals: [U])
+	public func == <T> (lhs:Bitmask<T>, rhs:Bitmask<T>) -> Bool
+	public func == <T> (lhs:Bitmask<T>, rhs:T) -> Bool
+	public func == <T> (lhs:Bitmask<T>, rhs:T.BitmaskRawType) -> Bool
+	public func < <T> (lhs:Bitmask<T>, rhs:Bitmask<T>) -> Bool
+	public struct Bitmask&lt;T : IBitmaskRepresentable&gt; : BitwiseOperationsType
+	public init(nilLiteral: ())
+	public struct Bitmask&lt;T : IBitmaskRepresentable&gt; : BitwiseOperationsType
+	public prefix func | <T: IBitmaskRepresentable> (val:T) -> Bitmask<T>
+	public func | <T: IBitmaskRepresentable> (lhs:Bitmask<T>, rhs:Bitmask<T>) -> Bitmask<T> { return Bitmask(lhs.bitmaskValue | rhs.bitmaskValue) }
+	public func | <T: IBitmaskRepresentable> (lhs:Bitmask<T>, rhs:T)          -> Bitmask<T> { return Bitmask(lhs.bitmaskValue | rhs.bitmaskValue) }
+	public func | <T: IBitmaskRepresentable> (lhs:T, rhs:Bitmask<T>)          -> Bitmask<T> { return rhs | lhs }
+	public func | <T: IBitmaskRepresentable> (lhs:T, rhs:T)                   -> Bitmask<T> { return Bitmask(lhs.bitmaskValue | rhs.bitmaskValue) }
+	public func |= <T: IBitmaskRepresentable> (inout lhs:Bitmask<T>, rhs:T)          { lhs.setValue(lhs.bitmaskValue | rhs.bitmaskValue) }
+	public func |= <T: IBitmaskRepresentable> (inout lhs:Bitmask<T>, rhs:Bitmask<T>) { lhs.setValue(lhs.bitmaskValue | rhs.bitmaskValue) }
+	public func & <T: IBitmaskRepresentable> (lhs:Bitmask<T>, rhs:Bitmask<T>) -> Bitmask<T> { return Bitmask(lhs.bitmaskValue & rhs.bitmaskValue) }
+	public func & <T: IBitmaskRepresentable> (lhs:Bitmask<T>, rhs:T)          -> Bitmask<T> { return Bitmask(lhs.bitmaskValue & rhs.bitmaskValue) }
+	public func & <T: IBitmaskRepresentable> (lhs:T,          rhs:Bitmask<T>) -> Bitmask<T> { return rhs & lhs }
+	public func & <T: IBitmaskRepresentable> (lhs:T, rhs:T)                   -> Bitmask<T> { return Bitmask(lhs.bitmaskValue & rhs.bitmaskValue) }
+	public func &= <T: IBitmaskRepresentable> (inout lhs:Bitmask<T>, rhs:T)          { lhs.setValue(lhs.bitmaskValue & rhs.bitmaskValue) }
+	public func &= <T: IBitmaskRepresentable> (inout lhs:Bitmask<T>, rhs:Bitmask<T>) { lhs.setValue(lhs.bitmaskValue & rhs.bitmaskValue) }
+	public func ^ <T: IBitmaskRepresentable> (lhs:Bitmask<T>, rhs:Bitmask<T>) -> Bitmask<T> { return Bitmask(lhs.bitmaskValue ^ rhs.bitmaskValue) }
+	public func ^ <T: IBitmaskRepresentable> (lhs:Bitmask<T>, rhs:T)          -> Bitmask<T> { return Bitmask(lhs.bitmaskValue ^ rhs.bitmaskValue) }
+	public func ^ <T: IBitmaskRepresentable> (lhs:T, rhs:Bitmask<T>)          -> Bitmask<T> { return rhs ^ lhs }
+	public func ^ <T: IBitmaskRepresentable> (lhs:T, rhs:T)                   -> Bitmask<T> { return Bitmask(lhs.bitmaskValue ^ rhs.bitmaskValue) }
+	public func ^= <T: IBitmaskRepresentable> (inout lhs:Bitmask<T>, rhs:T)          { lhs.setValue(lhs.bitmaskValue ^ rhs.bitmaskValue) }
+	public func ^= <T: IBitmaskRepresentable> (inout lhs:Bitmask<T>, rhs:Bitmask<T>) { lhs.setValue(lhs.bitmaskValue ^ rhs.bitmaskValue) }
+	public prefix func ~ <T: IBitmaskRepresentable> (value:Bitmask<T>) -> Bitmask<T> { return Bitmask(~(value.bitmaskValue)) }
+	public prefix func ~ <T: IBitmaskRepresentable> (value:T)          -> Bitmask<T> { return Bitmask(~(value.bitmaskValue)) }
+	public func ~=<T: IBitmaskRepresentable> (pattern: Bitmask<T>, value: Bitmask<T>) -> Bool { return (pattern & value).boolValue }
+	public func ~=<T: IBitmaskRepresentable> (pattern: Bitmask<T>, value: T) -> Bool          { return (pattern & value).boolValue }
+	public func ~=<T: IBitmaskRepresentable> (pattern: T, value: Bitmask<T>) -> Bool          { return (pattern & value).boolValue }
+	public var bitmaskValue: Int { return self }
+	public var integerValue: Int
+	public var bitmaskValue: Int8 { return self }
+	public var integerValue: Int
+	public var bitmaskValue: Int16 { return self }
+	public var integerValue: Int
+	public var bitmaskValue: Int32 { return self }
+	public var integerValue: Int
+	public var bitmaskValue: Int64 { return self }
+	public var integerValue: Int
+	public var bitmaskValue: UInt { return self }
+	public var integerValue: Int
+	public var bitmaskValue: UInt8 { return self }
+	public var integerValue: Int
+	public var bitmaskValue: UInt16 { return self }
+	public var integerValue: Int
+	public var bitmaskValue: UInt32 { return self }
+	public var integerValue: Int
+	public var bitmaskValue: UInt64 { return self }
+	public var integerValue: Int
