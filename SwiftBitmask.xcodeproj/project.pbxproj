@@ -87,7 +87,7 @@
 		C55044F91A3F49110057378F = {
 			isa = PBXGroup;
 			children = (
-				C550451F1A3F49990057378F /* Classes */,
+				C550451F1A3F49990057378F /* Source */,
 				C55045051A3F49110057378F /* SwiftBitmask */,
 				C55045121A3F49110057378F /* SwiftBitmaskTests */,
 				C55045041A3F49110057378F /* Products */,
@@ -140,14 +140,14 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
-		C550451F1A3F49990057378F /* Classes */ = {
+		C550451F1A3F49990057378F /* Source */ = {
 			isa = PBXGroup;
 			children = (
 				C55045201A3F49990057378F /* AutoBitmask.swift */,
 				C55045211A3F49990057378F /* Bitmask.swift */,
 				C5FA68491A7F08E6001BDF09 /* OptionSetView.swift */,
 			);
-			path = Classes;
+			path = Source;
 			sourceTree = SOURCE_ROOT;
 		};
 /* End PBXGroup section */
