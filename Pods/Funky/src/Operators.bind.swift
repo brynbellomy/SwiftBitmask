@@ -16,20 +16,14 @@ infix operator -<< { associativity left precedence 150 }
 
 
 public func >>-
-    <A, B>
-    (maybeValue: A?, f: A -> B?) -> B?
+    <A, B> (maybeValue: A?, f: A -> B?) -> B?
 {
-    switch maybeValue
-    {
-        case .Some(let x): return f(x)
-        case .None: return .None
-    }
+    return maybeValue.flatMap(f)
 }
 
 
 public func >>-
-    <A, B>
-    (wrapped: [A], f: A -> [B]) -> [B]
+    <A, B> (wrapped: [A], f: A -> [B]) -> [B]
 {
     return wrapped.map(f).reduce([], combine: +)
 }

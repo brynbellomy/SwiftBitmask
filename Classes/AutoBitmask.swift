@@ -27,7 +27,7 @@ public struct AutoBitmask
     public static func autoBitmaskValueFor <T: protocol<IAutoBitmaskable, IBitmaskRepresentable>>
         (autoBitmaskable:T) -> T.BitmaskRawType
     {
-        if let index = find(T.autoBitmaskValues, autoBitmaskable) {
+        if let index = T.autoBitmaskValues.indexOf(autoBitmaskable) {
             return T.BitmaskRawType(1 << index)
         }
         else { preconditionFailure("Attempted to call autoBitmaskValueFor(_:) with a non-bitmaskable value of T.") }

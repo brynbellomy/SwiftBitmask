@@ -47,23 +47,22 @@ public struct Bitmask <T: IBitmaskRepresentable> : BitwiseOperationsType
     public mutating func setValue(val: T)                { bitmaskValue = val.bitmaskValue }
     public mutating func setValue(val: T.BitmaskRawType) { bitmaskValue = val }
 
-    public mutating func setValue(val: [T])
-    {
-        val |> map‡ { $0.bitmaskValue }
-            |> reducer(T.BitmaskRawType.allZeros) { $0 | $1 }
-            |> setValue
+    public mutating func setValue(val: [T]) {
+        setValue(
+            val.map { $0.bitmaskValue } |> reducer(T.BitmaskRawType.allZeros) { $0 | $1 }
+        )
     }
 
-    public mutating func setValue(val: [T.BitmaskRawType])
-    {
-        val |> reducer(T.BitmaskRawType.allZeros) { $0 | $1 }
-            |> setValue
+    public mutating func setValue(val: [T.BitmaskRawType]) {
+        setValue(
+            val |> reducer(T.BitmaskRawType.allZeros) { $0 | $1 }
+        )
     }
 
-    public mutating func setValue(val: [Bitmask<T>])
-    {
-        val |> map‡ { $0.bitmaskValue }
-            |> setValue
+    public mutating func setValue(val: [Bitmask<T>]) {
+        setValue(
+            val.map { $0.bitmaskValue }
+        )
     }
 
     public func isSet(val:T) -> Bool {
@@ -77,11 +76,9 @@ public struct Bitmask <T: IBitmaskRepresentable> : BitwiseOperationsType
 }
 
 
-extension Bitmask: IBitmaskRepresentable
-{
-    public init <U: IBitmaskRepresentable> (_ vals: [U])
-    {
-        let arr = vals |> map‡ { $0.bitmaskValue as! T.BitmaskRawType }
+extension Bitmask: IBitmaskRepresentable {
+    public init <U: IBitmaskRepresentable> (_ vals: [U]) {
+        let arr = vals.map { $0.bitmaskValue as! T.BitmaskRawType }
         self.init(arr)
     }
 }

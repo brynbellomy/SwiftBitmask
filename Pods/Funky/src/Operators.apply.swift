@@ -27,7 +27,7 @@ public func <*>
 
 
 public func <*>
-    <A, B, E>
+    <A, B, E: ErrorType>
     (f: Result<A -> B, E>, values: Result<A, E>) -> Result<B, E>
 {
     return f.flatMap { fn in values.flatMap(fn >>> success) }

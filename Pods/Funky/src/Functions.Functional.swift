@@ -12,7 +12,7 @@
 /**
     Simple wrapper for `dispatch_after` that simplifies the most common use case (i.e., dispatch this block after X number of seconds).
  */
-public func after (#seconds:NSTimeInterval, onQueue queue:dispatch_queue_t, execute block:dispatch_block_t)
+public func after (seconds seconds:NSTimeInterval, onQueue queue:dispatch_queue_t, execute block:dispatch_block_t)
 {
     let time = dispatch_time(DISPATCH_TIME_NOW as dispatch_time_t, Int64(UInt64(seconds) * NSEC_PER_SEC))
     dispatch_after(time, queue, block)
@@ -24,7 +24,7 @@ public func after (#seconds:NSTimeInterval, onQueue queue:dispatch_queue_t, exec
  */
 public func randomDate (between startDate:NSDate, and endDate:NSDate) -> NSDate {
     let timespan     = Float(startDate.timeIntervalSinceNow - endDate.timeIntervalSinceNow)
-    let rouletteBall = NSTimeInterval(random(min:0, max:timespan))
+    let rouletteBall = NSTimeInterval(random(0, max:timespan))
 
     return NSDate(timeIntervalSince1970: startDate.timeIntervalSince1970 + rouletteBall)
 }
@@ -33,7 +33,7 @@ public func randomDate (between startDate:NSDate, and endDate:NSDate) -> NSDate 
     Randomly chooses an item from the given array and returns it.
  */
 public func chooseRandomly <T> (arr:[T]) -> T {
-    let rouletteBall = random(min: 0, max: Float(arr.count))
+    let rouletteBall = random(0, max: Float(arr.count))
     let chosenIndex  = Int(trunc(rouletteBall))
     return arr[chosenIndex]
 }
@@ -62,7 +62,7 @@ public func head
     <C: CollectionType>
     (collection: C) -> C.Generator.Element?
 {
-    if count(collection) > 0 {
+    if collection.count > 0 {
         return collection[collection.startIndex]
     }
     return nil
@@ -73,10 +73,10 @@ public func head
     Returns a collection containing all but the first element of `collection`.
  */
 public func tail
-    <C: CollectionType, D: ExtensibleCollectionType where C.Generator.Element == D.Generator.Element>
+    <C: CollectionType, D: RangeReplaceableCollectionType where C.Generator.Element == D.Generator.Element>
     (collection: C) -> D
 {
-    return tail(collection, collection.startIndex.successor())
+    return tail(collection, n: collection.startIndex.successor())
 }
 
 
@@ -84,11 +84,10 @@ public func tail
     Returns a collection containing all but the first `n` elements of `collection`.
  */
 public func tail
-    <C: CollectionType, D: ExtensibleCollectionType where C.Generator.Element == D.Generator.Element>
+    <C: CollectionType, D: RangeReplaceableCollectionType where C.Generator.Element == D.Generator.Element>
     (collection: C, n: C.Index) -> D
 {
     var theTail = D()
-    let end = collection.endIndex
     for i in n ..< collection.endIndex {
         theTail.append(collection[i])
     }
@@ -101,8 +100,8 @@ public func tail
     curried (yet).  Wraps the given `collection` in a type-erased sequence.
  */
 public func toSequence <C: CollectionType>
-    (collection: C) -> SequenceOf<C.Generator.Element> {
-    return SequenceOf(collection)
+    (collection: C) -> AnySequence<C.Generator.Element> {
+    return AnySequence(collection)
 }
 
 
@@ -134,7 +133,7 @@ public func toSequence <G: GeneratorType>
 
  */
 public func toCollection
-    <S: SequenceType, D: ExtensibleCollectionType where S.Generator.Element == D.Generator.Element>
+    <S: SequenceType, D: RangeReplaceableCollectionType where S.Generator.Element == D.Generator.Element>
     (seq:S) -> D
 {
     var gen = seq.generate()
@@ -198,7 +197,7 @@ public func equalTuples
  */
 public func equalSequences
     <S: SequenceType, T: SequenceType>
-    (one:S, two:T, equality:(S.Generator.Element, T.Generator.Element) -> Bool) -> Bool
+    (one:S, _ two:T, _ equality:(S.Generator.Element, T.Generator.Element) -> Bool) -> Bool
 {
     var gen1 = one.generate()
     var gen2 = two.generate()
@@ -221,7 +220,7 @@ public func equalSequences
 */
 public func both
     <T, U>
-    (one:T?, two:U?) -> (T, U)?
+    (one:T?, _ two:U?) -> (T, U)?
 {
     if let one = one, two = two {
         return (one, two)
@@ -312,31 +311,39 @@ public func zip3 <T, U, V>  (one:T) (two:U) (three:V) -> (T, U, V) {
 }
 
 
+/**
+    Merges the provided sequences into a sequence of tuples containing their respective elements.
+ */
 public func zipseq
     <S: SequenceType, T: SequenceType>
-    (one:S, two:T) -> SequenceOf<(S.Generator.Element, T.Generator.Element)>
+    (one:S, _ two:T) -> AnySequence<(S.Generator.Element, T.Generator.Element)>
 {
-    return ZipGenerator2(one.generate(), two.generate())
+    return Zip2Generator(one.generate(), two.generate())
                 |> unfold { (var generator) in both(generator.next(), generator) }
 }
 
 
 /**
+    Eagerly creates a sequence out of a generator by calling the generator's `next()` method until
+    it returns `nil`.  Do not call this on an infinite sequence.
 
+    - returns: A sequence containing the elements returned by the generator.
  */
-public func unfoldGenerator <G: GeneratorType> (gen:G) -> SequenceOf<G.Element> {
+public func unfoldGenerator <G: GeneratorType> (gen:G) -> AnySequence<G.Element> {
     return gen |> unfold { (var generator) in both(generator.next(), generator) }
 }
 
 
 /**
-    Creates a new sequence using an initial value and a generator closure.  The closure is called repeatedly to obtain the elements of the sequence.  The sequence is returned as soon as the closure returns `nil`.
+    Creates a new sequence using an initial value and a generator closure.  The closure is called
+    repeatedly to obtain the elements of the sequence.  The sequence is returned as soon as the
+    closure returns `nil`.
 
-    :param: closure The closure takes as its only argument the `T` value it returned on its last iteration.  It should return either `nil` (if the unfolding should stop), or a 2-tuple `(U, T)` where the first element is a new element of the sequence, and the second element is thevalue to pass to `closure` on the next iteration.
-    :param: initial The value to pass to `closure` the first time it's called.
+    - parameter closure: The closure takes as its only argument the `T` value it returned on its last iteration.  It should return either `nil` (if the unfolding should stop), or a 2-tuple `(U, T)` where the first element is a new element of the sequence, and the second element is thevalue to pass to `closure` on the next iteration.
+    - parameter initial: The value to pass to `closure` the first time it's called.
  */
 public func unfold <T, U>
-    (closure: T -> (U, T)?) (initial:T) -> SequenceOf<U>
+    (closure: T -> (U, T)?) (initial:T) -> AnySequence<U>
 {
     var arr = [U]()
     var current = initial
@@ -345,41 +352,44 @@ public func unfold <T, U>
         arr.append(created)
     }
 
-    return SequenceOf(arr)
+    return AnySequence(arr)
 }
 
 
+/**
+    Very abstractly represents an iterative process that builds up a sequence.
+
+    Calls `closure` on `initial` (and afterwards, always on the previous return value of `closure`) and
+    stops after `count` iterations.
+
+    The returned sequence is built up out of the left element of the tuple returned by `closure`.  The
+    right element of the tuple returned by `closure` is intended for passing state to the next iteration.
+
+    - returns: A sequence containing the left/first element of each tuple returned by `closure`.
+ */
 public func unfold <T, U>
-    (count: Int, closure: T -> (U, T)?) (initial: T) -> SequenceOf<U>
+    (count: Int, closure: T -> (U, T)?) (initial: T) -> AnySequence<U>
 {
     var arr = [U]()
     var current = initial
 
-    for i in 0 ..< count
-    {
-        if let (created, next) = closure(current) {
-            current = next
-            arr.append(created)
+    for _ in 0 ..< count{
+        guard let (created, next) = closure(current) else {
+            break
         }
-        else { break }
+        current = next
+        arr.append(created)
     }
 
-    return SequenceOf(arr)
+    return AnySequence(arr)
 }
 
 
 
-//
-//-- | The 'partition' function takes a predicate a list and returns
-//-- the pair of lists of elements which do and do not satisfy the
-//-- predicate, respectively; i.e.,
-//--
-//-- > partition p xs == (filter p xs, filter (not . p) xs)
-//
-//partition               :: (a -> Bool) -> [a] -> ([a],[a])
-//{-# INLINE partition #-}
-//partition p xs = foldr (select p) ([],[]) xs
-//
+/**
+    Takes a predicate and a sequence and returns the pair of arrays of elements which do and do not satisfy the
+    predicate, respectively; i.e.,
+ */
 
 public func partition
     <S: SequenceType, T where T == S.Generator.Element>
@@ -398,9 +408,9 @@ public func partition
 /**
     Returns `true` iff `range` contains only valid indices of `collection`.
  */
-public func contains
+public func containsIndices
     <I: Comparable, C: CollectionType where I == C.Index>
-    (collection: C, range: Range<I>) -> Bool
+    (collection: C, _ range: Range<I>) -> Bool
 {
     let interval: HalfOpenInterval = collection.startIndex ..< collection.endIndex
     return interval ~= range.startIndex && interval ~= range.endIndex
@@ -427,7 +437,7 @@ public func mapLeft
     <T, U, V>
     (transform: T -> V) (_ dict: [T: U]) -> [(V, U)]
 {
-    return map(dict) { mapLeft1(transform)($0) }
+    return dict.map { mapLeft1(transform)($0) }
 }
 
 
@@ -439,7 +449,7 @@ public func mapLeft
     <T, U, V>
     (transform: T -> V) (_ seq: [(T, U)]) -> [(V, U)]
 {
-    return map(seq, mapLeft1(transform))
+    return seq.map(mapLeft1(transform))
 }
 
 
@@ -459,7 +469,7 @@ public func mapRight
     <T, U, V>
     (transform: U -> V) (_ dict: [T: U]) -> [(T, V)]
 {
-    return map(dict, mapRight1(transform))
+    return dict.map(mapRight1(transform))
 }
 
 
@@ -471,7 +481,7 @@ public func mapRight
     <T, U, V>
     (transform: U -> V) (_ seq:[(T, U)]) -> [(T, V)]
 {
-    return map(seq, mapRight1(transform))
+    return seq.map(mapRight1(transform))
 }
 
 
@@ -530,7 +540,7 @@ public func takeRight
 /**
     First element of the sequence.
 
-    :returns: First element of the sequence if present
+    - returns: First element of the sequence if present
  */
 public func takeFirst <S: SequenceType>
     (seq:S) -> S.Generator.Element?
@@ -542,8 +552,8 @@ public func takeFirst <S: SequenceType>
 /**
     Checks if call returns true for any element of `seq`.
 
-    :param: call Function to call for each element
-    :returns: True if call returns true for any element of self
+    - parameter call: Function to call for each element
+    - returns: True if call returns true for any element of self
  */
 public func any <S: SequenceType>
     (predicate: S.Generator.Element -> Bool) (seq: S) -> Bool
@@ -561,16 +571,16 @@ public func any <S: SequenceType>
 /**
     Subsequence from `n` to the end of the sequence.
 
-    :param: n Number of elements to skip
-    :returns: Sequence from n to the end
+    - parameter n: Number of elements to skip
+    - returns: Sequence from n to the end
  */
 public func skip <S: SequenceType>
-    (n: Int) (seq: S) -> SequenceOf <S.Generator.Element>
+    (n: Int) (seq: S) -> AnySequence<S.Generator.Element>
 {
     var gen = seq.generate()
-    return SequenceOf { Void -> S.Generator in
+    return AnySequence { Void -> S.Generator in
         for _ in 0 ..< n {
-            gen.next()
+            _ = gen.next()
         }
         return gen
     }
@@ -580,8 +590,8 @@ public func skip <S: SequenceType>
 /**
     Object at the specified index if exists.
 
-    :param: index
-    :returns: Object at index in sequence, `nil` if index is out of bounds
+    - parameter index:
+    - returns: Object at index in sequence, `nil` if index is out of bounds
  */
 public func takeIndex <S: SequenceType>
     (index: Int) (seq: S) -> S.Generator.Element?
@@ -592,11 +602,11 @@ public func takeIndex <S: SequenceType>
 /**
     Objects in the specified range.
 
-    :param: range
-    :returns: Subsequence in range
+    - parameter range:
+    - returns: Subsequence in range
 */
 func takeRange <S: SequenceType>
-    (range: Range<Int>) (seq: S) -> SequenceOf<S.Generator.Element>
+    (range: Range<Int>) (seq: S) -> AnySequence<S.Generator.Element>
 {
     let count = range.endIndex - range.startIndex
     return seq  |> skip(range.startIndex)
@@ -607,12 +617,12 @@ func takeRange <S: SequenceType>
 /**
     Skips the elements in the sequence up until the condition returns false.
 
-    :param: condition A function which returns a boolean if an element satisfies a given condition or not.
-    :param: seq The sequence.
-    :returns: Elements of the sequence starting with the element which does not meet the condition.
+    - parameter condition: A function which returns a boolean if an element satisfies a given condition or not.
+    - parameter seq: The sequence.
+    - returns: Elements of the sequence starting with the element which does not meet the condition.
  */
 public func skipWhile <S: SequenceType>
-    (condition: S.Generator.Element -> Bool) (_ seq: S) -> SequenceOf<S.Generator.Element>
+    (condition: S.Generator.Element -> Bool) (_ seq: S) -> AnySequence<S.Generator.Element>
 {
     var gen = seq.generate()
     var checkingGenerator = seq.generate()
@@ -620,15 +630,15 @@ public func skipWhile <S: SequenceType>
     var keepSkipping = true
 
     while keepSkipping {
-        var nextItem = checkingGenerator.next()
+        let nextItem = checkingGenerator.next()
         keepSkipping = nextItem != nil ? condition(nextItem!) : false
 
         if keepSkipping {
-            gen.next()
+            _ = gen.next()
         }
     }
 
-    return SequenceOf(GeneratorOf(gen))
+    return AnySequence(anyGenerator(gen))
 }
 
 
@@ -636,24 +646,25 @@ public func skipWhile <S: SequenceType>
 /**
     Returns the elements of the sequence up until an element does not meet the condition.
 
-    :param: condition A function which returns a boolean if an element satisfies a given condition or not.
-    :param: seq The sequence.
-    :returns: Elements of the sequence up until an element does not meet the condition.
+    - parameter condition: A function which returns a boolean if an element satisfies a given condition or not.
+    - parameter seq: The sequence.
+    - returns: Elements of the sequence up until an element does not meet the condition.
  */
 public func takeWhile <S: SequenceType>
-    (predicate: S.Generator.Element -> Bool) (_ seq: S) -> SequenceOf<S.Generator.Element>
+    (predicate: S.Generator.Element -> Bool) (_ seq: S) -> AnySequence<S.Generator.Element>
 {
-    return SequenceOf(takeWhileGenerator(seq, predicate))
+    let tw = takeWhileGenerator(seq, predicate:predicate)
+    return AnySequence(tw)
 }
 
 
 public func takeWhileGenerator <S: SequenceType>
-    (seq: S, predicate:S.Generator.Element -> Bool) -> GeneratorOf<S.Generator.Element>
+    (seq: S, predicate:S.Generator.Element -> Bool) -> AnyGenerator<S.Generator.Element>
 {
     var gen = seq.generate()
     var endConditionMet = false
 
-    return GeneratorOf<S.Generator.Element> {
+    return anyGenerator {
         if let next = gen.next() {
             if !endConditionMet {
                 endConditionMet = !predicate(next)
@@ -670,14 +681,14 @@ public func takeWhileGenerator <S: SequenceType>
     Takes the first `n` elements of `seq`.
  */
 public func take <S: SequenceType>
-    (n: Int) (_ seq: S) -> SequenceOf<S.Generator.Element>
+    (n: Int) (_ seq: S) -> AnySequence<S.Generator.Element>
 {
-    return SequenceOf(takeGenerator(seq, n))
+    return AnySequence(takeGenerator(seq, n:n))
 }
 
 
 public func takeGenerator <S: SequenceType>
-    (seq: S, n: Int) -> GeneratorOf<S.Generator.Element>
+    (seq: S, n: Int) -> AnyGenerator<S.Generator.Element>
 {
     var count = 0
     return takeWhileGenerator(seq) { elem in
@@ -690,7 +701,7 @@ public func groupBy
     <K: Hashable, V, S: SequenceType where S.Generator.Element == V>
     (keyClosure:V -> K) (_ seq:S) -> [K: [V]]
 {
-    return reduce(seq, [K: [V]]()) {
+    return seq.reduce([K: [V]]()) {
         (var current, next) in
 
         let key: K = keyClosure(next)
@@ -708,29 +719,7 @@ public func reducer
     <S: SequenceType, U>
     (initial:U, combine: (U, S.Generator.Element) -> U) (_ seq:S) -> U
 {
-    return reduce(seq, initial, combine)
-}
-
-
-/**
-    Argument-reversed, curried version of `split()`.
- */
-public func splitOn
-    <S: Sliceable where S.Generator.Element: Equatable>
-    (separator: S.Generator.Element) (collection: S) -> [S.SubSlice]
-{
-    return split(collection, isSeparator:{ $0 == separator })
-}
-
-
-/**
-    Curried version of `join()`.
- */
-public func joinWith
-    <C: ExtensibleCollectionType, S: SequenceType where S.Generator.Element == C>
-    (separator: C) (elements: S) -> C
-{
-    return join(separator, elements)
+    return seq.reduce(initial, combine: combine)
 }
 
 
@@ -746,18 +735,6 @@ public func unique
         dict[item] = true
     }
     return Array(dict.keys)
-}
-
-
-/**
-    Decomposes a `Dictionary` into a lazy sequence of key-value tuples.
- */
-public func pairs
-    <K: Hashable, V>
-    (dict:[K: V]) -> SequenceOf<(K, V)>
-{
-    var gen = lazy(dict).map(id).generate()
-    return SequenceOf(gen) //map(dict, id)
 }
 
 
@@ -791,7 +768,7 @@ public func curry <A, B, C, R>
 
     See also the `‡` operator, which is equivalent and more concise:
 
-        someArray |> map‡ { $0 ... })
+        someArray |> mapTo { $0 ... })
 
  */
 public func currySwap
@@ -824,8 +801,8 @@ public func isNil <T: NilLiteralConvertible> (val:T?) -> Bool {
 public func isNil <T> (val:T?) -> Bool
 {
     switch val {
-        case .Some(let _): return true
-        case .None:        return false
+        case .Some: return true
+        case .None: return false
     }
 }
 
@@ -834,7 +811,7 @@ public func isNil <T> (val:T?) -> Bool
     Returns `true` if `value` is non-`nil`, `false` otherwise.
  */
 public func nonNil <T> (value:T?) -> Bool {
-    if let value = value {
+    if let _ = value {
         return true
     }
     return false
@@ -900,7 +877,7 @@ public func zipFilter <T, U> (transform: T -> U?) (object: T) -> (T, U)?
  */
 public func zipMap <C: CollectionType, T> (transform: C.Generator.Element -> T) (source: C) -> [(C.Generator.Element, T)] {
     let theZip = zipMap(transform)
-    return map(source, theZip)
+    return source.map(theZip)
 }
 
 
@@ -913,15 +890,17 @@ public func zipMapLeft
     (transform: C.Generator.Element -> T) (source: C) -> [(T, C.Generator.Element)]
 {
     let theZip = zipMapLeft(transform)
-    return map(source, theZip)
+    return source.map(theZip)
 }
 
 
-public func selectWhere
-    <S: SequenceType>
-    (predicate:S.Generator.Element -> Bool) (seq: S) -> SequenceOf<S.Generator.Element>
+/**
+    Decomposes a `Dictionary` into a lazy sequence of key-value tuples.
+ */
+public func pairs <K: Hashable, V>
+    (dict:[K: V]) -> LazySequence<AnySequence<(K, V)>>
 {
-    return SequenceOf(lazy(seq).filter(predicate))
+    return AnySequence(dict).lazy
 }
 
 
@@ -929,10 +908,10 @@ public func selectWhere
     A curried, argument-reversed version of `filter` for use in functional pipelines.  The return type
     must be explicitly specified, as this function is capable of returning any `ExtensibleCollectionType`.
 
-    :returns: A collection of type `D` containing the elements of `seq` that satisfied `predicate`.
+    - returns: A collection of type `D` containing the elements of `seq` that satisfied `predicate`.
  */
 public func selectWhere
-    <S: SequenceType, D: ExtensibleCollectionType where S.Generator.Element == D.Generator.Element>
+    <S: SequenceType, D: RangeReplaceableCollectionType where S.Generator.Element == D.Generator.Element>
     (predicate: S.Generator.Element -> Bool) (_ seq: S) -> D
 {
     var keepers = D()
@@ -948,7 +927,7 @@ public func selectWhere
 /**
     A curried, argument-reversed version of `filter` for use in functional pipelines.
 
-    :returns: An `Array` containing the elements of `seq` that satisfied `predicate`.
+    - returns: An `Array` containing the elements of `seq` that satisfied `predicate`.
  */
 public func selectArray <S: SequenceType>
     (predicate: S.Generator.Element -> Bool) (_ seq: S) -> Array<S.Generator.Element>
@@ -965,50 +944,29 @@ public func selectWhere <K, V> (predicate: (K, V) -> Bool) (dict: [K: V]) -> [K:
     return arr |> mapToDictionary(id)
 }
 
-
-///**
-//    A curried, argument-reversed version of `map` for use in functional pipelines.  For example:
-//
-//        let descriptions = someCollection |> mapr { $0.description }
-//
-//    This is equivalent to using the `‡` operator and Swift's built-in `map`:
-//
-//        let descriptions = someCollection |> map‡ { $0.description }
-//
-//    :param: transform The transformation function to apply to each incoming element.
-//    :param: source The collection to transform.
-//    :returns: The transformed collection.
-// */
-//public func mapr
-//    <S: SequenceType, T>
-//    (transform: S.Generator.Element -> T) (source: S) -> [T]
-//{
-//    return map(source, transform)
-//}
+public func countWhere <S: SequenceType>
+    (predicate: S.Generator.Element -> Bool) (_ seq: S) -> Int
+{
+    return (seq |> selectArray(predicate)).count
+}
 
 
 /**
-    A curried, argument-reversed version of `map` for use in functional pipelines.  `mapTo` is capable
-    of returning the resulting mapped collection as any `ExtensibleCollectionType`.  The return type
-    must therefore always be explicitly specified.  For example:
+    A curried, argument-reversed version of `map` for use in functional pipelines.  For example:
 
-        let descriptions: [String] =
-            someCollection |> mapr { $0.description }
+        let descriptions = someCollection |> mapTo { $0.description }
 
     :param: transform The transformation function to apply to each incoming element.
     :param: source The collection to transform.
     :returns: The transformed collection.
  */
 public func mapTo
-    <S: SequenceType, D: ExtensibleCollectionType>
-    (transform: S.Generator.Element -> D.Generator.Element) (source: S) -> D
+    <S: SequenceType, T>
+    (transform: S.Generator.Element -> T) (source: S) -> [T]
 {
-    var mapped = D()
-    for item in source {
-        mapped.append(transform(item))
-    }
-    return mapped
+    return source.map(transform)
 }
+
 
 
 /**
@@ -1017,12 +975,12 @@ public func mapTo
     (the return type) explicitly.  Small pain in the ass for the lazy, but it lets you ask for any
     kind of `ExtensibleCollectionType` that you could possibly want.
 
-    :param: transform The transform function.
-    :param: source The sequence to map.
-    :returns: An `ExtensibleCollectionType` of your choosing.
+    - parameter transform: The transform function.
+    - parameter source: The sequence to map.
+    - returns: An `ExtensibleCollectionType` of your choosing.
  */
 public func mapFilter
-    <S: SequenceType, D: ExtensibleCollectionType>
+    <S: SequenceType, D: RangeReplaceableCollectionType>
     (transform: S.Generator.Element -> D.Generator.Element?) (source: S) -> D
 {
     var result = D()
@@ -1039,9 +997,9 @@ public func mapFilter
     Curried function that maps a transform function over a sequence and filters `nil` values
     from the resulting `Array` before returning it.
 
-    :param: transform The transform function.
-    :param: source The sequence to map.
-    :returns: An `Array` with the mapped, non-nil values from the input sequence.
+    - parameter transform: The transform function.
+    - parameter source: The sequence to map.
+    - returns: An `Array` with the mapped, non-nil values from the input sequence.
  */
 public func mapFilter
     <S: SequenceType, T>
@@ -1082,10 +1040,10 @@ public func rejectIf
     returned as an `Array`.  This function is mainly useful for logging failures in
     functional pipelines.
 
-    :param: predicate The predicate closure to which each sequence element is passed.
-    :param: disposal The disposal closure that is invoked with each rejected element.
-    :param: source The sequence to filter.
-    :returns: The filtered sequence as an `Array`.
+    - parameter predicate: The predicate closure to which each sequence element is passed.
+    - parameter disposal: The disposal closure that is invoked with each rejected element.
+    - parameter source: The sequence to filter.
+    - returns: The filtered sequence as an `Array`.
  */
 public func rejectIfAndDispose
     <S: SequenceType, T where S.Generator.Element == T>
@@ -1112,13 +1070,13 @@ public func rejectIfAndDispose
 
     <pre>
     someCollection |> doEach { println("the object is \($0)") }
-                   |> map‡    { $0.description }
+                   |> mapTo    { $0.description }
                    |> doEach { println("the object's description is \($0)") }
     </pre>
 
-    :param: transform The transformation function to apply to each incoming element.
-    :param: source The collection to transform.
-    :returns: The collection, unmodified.
+    - parameter transform: The transformation function to apply to each incoming element.
+    - parameter source: The collection to transform.
+    - returns: The collection, unmodified.
  */
 public func doEach
     <S: SequenceType, T>
@@ -1173,8 +1131,8 @@ public func doSide3
 /**
     Rejects nil elements from the provided collection.
 
-    :param: collection The collection to filter.
-    :returns: The collection with all `nil` elements removed.
+    - parameter collection: The collection to filter.
+    - returns: The collection with all `nil` elements removed.
 */
 public func rejectNil
     <T>
@@ -1197,8 +1155,8 @@ public func rejectNil
     have non-`nil` elements).  Another way to think about `rejectEitherNil` is that it is a logical transform
     that moves the `?` (`Optional` unary operator) from inside the tuple braces to the outside.
 
-    :param: tuple The tuple to examine.
-    :returns: The tuple or nil.
+    - parameter tuple: The tuple to examine.
+    - returns: The tuple or nil.
 */
 public func rejectEitherNil
     <T, U>
@@ -1217,14 +1175,14 @@ public func rejectEitherNil
     Such a `Dictionary` can be passed through `pairs()` to create a sequence of key-value tuples that this
     function can be `mapFilter`ed over.
 
-    :param: collection The collection to filter.
-    :returns: The provided collection with all tuples containing a `nil` element removed.
+    - parameter collection: The collection to filter.
+    - returns: The provided collection with all tuples containing a `nil` element removed.
 */
 public func rejectEitherNil
     <T, U>
     (collection: [(T?, U?)]) -> [(T, U)]
 {
-    return reduce(collection, Array<(T, U)>()) { (var nonNilValues, item) in
+    return collection.reduce(Array<(T, U)>()) { (var nonNilValues, item) in
         if nonNil(item.0) && nonNil(item.1) {
             nonNilValues.append((item.0!, item.1!))
         }
@@ -1236,8 +1194,8 @@ public func rejectEitherNil
 /**
     Converts the array to a dictionary with the keys supplied via `keySelector`.
 
-    :param: keySelector A function taking an element of `array` and returning the key for that element in the returned dictionary.
-    :returns: A dictionary comprising the key-value pairs constructed by applying `keySelector` to the values in `array`.
+    - parameter keySelector: A function taking an element of `array` and returning the key for that element in the returned dictionary.
+    - returns: A dictionary comprising the key-value pairs constructed by applying `keySelector` to the values in `array`.
 */
 public func mapToDictionaryKeys
     <K: Hashable, S: SequenceType>
@@ -1254,8 +1212,8 @@ public func mapToDictionaryKeys
 /**
     Converts the array to a dictionary with the keys supplied via `keySelector`.
 
-    :param: keySelector A function taking an element of `array` and returning the key for that element in the returned dictionary.
-    :returns: A dictionary comprising the key-value pairs constructed by applying `keySelector` to the values in `array`.
+    - parameter keySelector: A function taking an element of `array` and returning the key for that element in the returned dictionary.
+    - returns: A dictionary comprising the key-value pairs constructed by applying `keySelector` to the values in `array`.
 */
 public func mapToDictionary
     <K: Hashable, V, S: SequenceType>
@@ -1273,15 +1231,15 @@ public func mapToDictionary
 /**
     Iterates through `domain` and returns the index of the first element for which `predicate(element)` returns `true`.
 
-    :param: domain The collection to search.
-    :returns: The index of the first matching item,  or `nil` if none was found.
+    - parameter domain: The collection to search.
+    - returns: The index of the first matching item,  or `nil` if none was found.
  */
 public func findWhere
     <C: CollectionType>
     (domain: C, predicate: (C.Generator.Element) -> Bool) -> C.Index?
 {
     var maybeIndex: C.Index? = domain.startIndex
-    var numElementsRemaining = count(domain).toIntMax()
+    var numElementsRemaining = domain.count.toIntMax()
 
     while maybeIndex != nil && numElementsRemaining > 0
     {
@@ -1315,9 +1273,8 @@ public func findWhere
 public func decompose <T>
     (array:[T]) -> (head: T, tail: [T])?
 {
-    let theTail = array[1 ..< array.count]
     if array.count > 0 {
-        return (array.first!, tail(array, 1))
+        return (array.first!, tail(array, n: 1))
     }
     return nil
 }
@@ -1339,7 +1296,7 @@ public func valueForKeypath <K: Hashable, V>
         else {
             if let innerDict = currentValue as? [K: V] {
                 let newKeypath = Array(keypath[ 1 ..< keypath.endIndex ])
-                return valueForKeypath(innerDict, newKeypath)
+                return valueForKeypath(innerDict, keypath: newKeypath)
             }
         }
     }
@@ -1365,14 +1322,13 @@ public func setValueForKeypath
             return success(dict)
 
         case let c where c > 1:
-            let (firstKey, remainingKeys) = (first(keypath)!, dropFirst(keypath))
+            let (firstKey, remainingKeys) = (keypath.first!, keypath.dropFirst())
             if dict.indexForKey(firstKey) == nil {
                 dict[firstKey] = [String: AnyObject]() as AnyObject
             }
 
-            if var subDict = dict[firstKey] as? [String: AnyObject]
-            {
-                return setValueForKeypath(subDict, Array(remainingKeys), value)
+            if let subDict = dict[firstKey] as? [String: AnyObject] {
+                return setValueForKeypath(subDict, keypath: Array(remainingKeys), value: value)
                             .map { changedSubDict in
                                 dict[firstKey] = changedSubDict
                                 return dict
@@ -1387,11 +1343,11 @@ public func setValueForKeypath
 
 
 public func mapIfIndex
-    <S: SequenceType, D: ExtensibleCollectionType where S.Generator.Element == D.Generator.Element>
+    <S: SequenceType, D: RangeReplaceableCollectionType where S.Generator.Element == D.Generator.Element>
     (source: S, transform: S.Generator.Element -> S.Generator.Element, ifIndex: Int -> Bool) -> D
 {
         var result = D()
-        for (index, value) in enumerate(source) {
+        for (index, value) in source.enumerate() {
             if ifIndex(index) == true {
                 result.append(transform(value))
             }
@@ -1404,14 +1360,14 @@ public func mapIfIndex
 
 
 public func mapEveryNth
-    <S: SequenceType, C: ExtensibleCollectionType where S.Generator.Element == C.Generator.Element>
+    <S: SequenceType, C: RangeReplaceableCollectionType where S.Generator.Element == C.Generator.Element>
     (source: S, n: Int, transform: S.Generator.Element -> S.Generator.Element) -> C
 {
     // enumerate starts from zero, so for this to work with the nth element,
     // and not the 0th, n+1th etc, we need to add 1 to the ifIndex check:
     let isNth = { ($0 + 1) % n == 0 }
 
-    return mapIfIndex(source, transform, isNth)
+    return mapIfIndex(source, transform: transform, ifIndex: isNth)
 }
 
 

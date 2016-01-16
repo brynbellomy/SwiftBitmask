@@ -27,7 +27,7 @@ public func <^>
     <A, B>
     (f: A -> B, values: [A]) -> [B]
 {
-    return map(values, f)
+    return values.map(f)
 }
 
 

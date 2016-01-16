@@ -1,5 +1,5 @@
 framework module Funky {
-  umbrella header "Pods-Funky-umbrella.h"
+  umbrella header "Funky-umbrella.h"
 
   export *
   module * { export * }

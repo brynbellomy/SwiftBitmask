@@ -58,8 +58,8 @@ public struct OptionSetView <T: IBitmaskRepresentable where T: Hashable>
 
 extension OptionSetView: SequenceType
 {
-    public func generate() -> GeneratorOf<T> {
+    public func generate() -> AnyGenerator<T> {
         var generator = options.generate()
-        return GeneratorOf { generator.next() }
+        return anyGenerator { generator.next() }
     }
 }

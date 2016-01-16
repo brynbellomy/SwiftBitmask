@@ -1,5 +1,5 @@
 framework module Regex {
-  umbrella header "Pods-Regex-umbrella.h"
+  umbrella header "Regex-umbrella.h"
 
   export *
   module * { export * }

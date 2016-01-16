@@ -53,7 +53,7 @@ public func />>
 }
 
 public func />>
-    <T, U, V, E>
+    <T, U, V, E: ErrorType>
     (f: T -> Result<U, E>, g: U -> V)
     -> T -> Result<V, E>
 {
@@ -61,7 +61,7 @@ public func />>
 }
 
 public func >>>
-    <T, U, E>
+    <T, U>
     (f: T -> U, g: U -> Void)
     -> T -> Void
 {
@@ -81,9 +81,9 @@ public func |>>
 /**
     The function composition operator.
 
-    :param: g The outer function, called second and passed the return value of f(x).
-    :param: f The inner function, called first and passed some value x.
-    :returns: A function that takes some argument x, calls g(f(x)), and returns the value.
+    - parameter g: The outer function, called second and passed the return value of f(x).
+    - parameter f: The inner function, called first and passed some value x.
+    - returns: A function that takes some argument x, calls g(f(x)), and returns the value.
  */
 public func •
     <T, U, V>

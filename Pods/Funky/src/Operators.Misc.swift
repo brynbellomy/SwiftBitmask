@@ -39,7 +39,7 @@ public func =?? <T>(inout lhs:T?, maybeRhs: T?) {
 /**
     The set-if-non-failure operator.  Will only set `lhs` to `rhs` if `rhs` is not a `Result<T>.Failure`.
  */
-public func =?? <T, E> (inout lhs:T, result: Result<T, E>) {
+public func =?? <T, E: ErrorType> (inout lhs:T, result: Result<T, E>) {
     lhs =?? result.value
 }
 
@@ -47,7 +47,7 @@ public func =?? <T, E> (inout lhs:T, result: Result<T, E>) {
 /**
     The set-if-non-failure operator.  Will only set `lhs` to `rhs` if `rhs` is not a `Result<T>.Failure`.
  */
-public func =?? <T, E> (inout lhs:T?, result: Result<T, E>) {
+public func =?? <T, E: ErrorType> (inout lhs:T?, result: Result<T, E>) {
     lhs =?? result.value
 }
 
@@ -90,7 +90,7 @@ public func ??= <T: Any> (inout lhs:T?, @autoclosure rhs: () -> T?)
 /**
     Nil coalescing operator for `Result<T, E>`.
  */
-public func ?± <T, E>
+public func ?± <T, E: ErrorType>
     (lhs: T?, @autoclosure rhs: () -> Result<T, E>) -> Result<T, E>
 {
     if let lhs = lhs {
@@ -101,7 +101,7 @@ public func ?± <T, E>
     }
 }
 
-public func ?± <T, E>
+public func ?± <T, E: ErrorType>
     (lhs: Result<T, E>, @autoclosure rhs: () -> Result<T, E>) -> Result<T, E>
 {
     switch lhs {
@@ -120,7 +120,7 @@ postfix operator ‡ {}
 /**
    The reverse-args-and-curry operator (type shift+option+7).  Useful in bringing the Swift stdlib collection functions into use in functional pipelines.
 
-   For example: `let lowercaseStrings = someStrings |> map‡ { $0.lowercaseString }`
+   For example: `let lowercaseStrings = someStrings |> mapTo { $0.lowercaseString }`
 */
 
 //public postfix func ‡

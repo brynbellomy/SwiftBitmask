@@ -8,13 +8,14 @@
 
 import Foundation
 
-private func formatError(error:NSError) -> String
+private func formatError(error:ErrorType) -> String
 {
     if let errorIO = error as? ErrorIO {
         return errorIO.localizedDescription
     }
     else {
-        if let file = error.userInfo?["file"] as? String, line = error.userInfo?["line"] as? Int {
+        let error = error as NSError
+        if let file = error.userInfo["file"] as? String, line = error.userInfo["line"] as? Int {
             return "[\(file) : \(line)] \(error.localizedDescription)"
         }
         return "\(error.localizedDescription)"
@@ -23,13 +24,13 @@ private func formatError(error:NSError) -> String
 
 
 /**
-    The primary purpose of `ErrorIO` (a subclass of `NSError`) is to attempt to standardize a
+    The primary purpose of `ErrorIO` (which conforms to `ErrorType`) is to attempt to standardize a
     method for coalescing multiple errors.  For example, a task with multiple subtasks might
     return a `Result<T>` the error type of which is an `ErrorIO` containing multiple errors
     from multiple failed subtasks.  `ErrorIO` implements `SequenceType`, `CollectionType`,
     `ExtensibleCollectionType`, and `ArrayLiteralConvertible`.
  */
-public class ErrorIO: NSError, ArrayLiteralConvertible
+public class ErrorIO: ErrorType, ArrayLiteralConvertible
 {
     public struct Constants {
         public static let FileKey = "__file__"
@@ -43,9 +44,9 @@ public class ErrorIO: NSError, ArrayLiteralConvertible
     public class var defaultCode: Int { return 1 }
 
     /** The `Element` of `ErrorIO` when considered as a sequence/collection. */
-    public typealias Element = NSError
+    public typealias Element = ErrorType
 
-    /** The type of the underlying collection that holds the `NSError`s contained by this `ErrorIO`. */
+    /** The type of the underlying collection that holds the `ErrorType`s contained by this `ErrorIO`. */
     public typealias UnderlyingCollection = [Element]
 
     /** The errors contained by this `ErrorIO`. */
@@ -53,31 +54,14 @@ public class ErrorIO: NSError, ArrayLiteralConvertible
 
     public var hasErrors: Bool { return errors.count > 0 }
 
-    override public var localizedDescription: String {
+    public var localizedDescription: String {
         let localizedErrors = describe(errors) { formatError($0) |> indent }
         return "<ErrorIO: errors = \(localizedErrors)>"
     }
-
-    required public init() {
-        super.init(domain: ErrorIO.defaultDomain, code:ErrorIO.defaultCode, userInfo:nil)
+    
+    public init() {
     }
 
-//    convenience public init(others: ErrorIO...)
-//    {
-//        self.init()
-//        for other in others {
-//            errors += other.errors
-//        }
-//    }
-//
-//    convenience public init(errors: NSError...)
-//    {
-//        self.init()
-//        for other in errors {
-//            errors.append(other)
-//        }
-//    }
-//
     convenience required public init(arrayLiteral errors: Element...) {
         self.init()
         extend(errors)
@@ -87,7 +71,7 @@ public class ErrorIO: NSError, ArrayLiteralConvertible
         return ErrorIO() <~ NSError(domain: ErrorIO.defaultDomain, code: ErrorIO.defaultCode, userInfo: userInfo)
     }
 
-    public class func defaultError(message: String, file: String = __FILE__, line: Int = __LINE__) -> ErrorIO
+    public class func defaultError(message message: String, file: String = __FILE__, line: Int = __LINE__) -> ErrorIO
     {
         let userInfo: [NSObject: AnyObject] = [
             NSLocalizedDescriptionKey: message,
@@ -102,7 +86,7 @@ public class ErrorIO: NSError, ArrayLiteralConvertible
         return defaultError(userInfo)
     }
 
-    required public init(coder aDecoder: NSCoder) { fatalError("init(coder:) has not been implemented") }
+    required public init?(coder aDecoder: NSCoder) { fatalError("init(coder:) has not been implemented") }
 
     public func asResult <T> () -> Result<T, ErrorIO> {
         return Result<T, ErrorIO>.Failure(Box(self))
@@ -116,10 +100,10 @@ public class ErrorIO: NSError, ArrayLiteralConvertible
 
 extension ErrorIO: SequenceType
 {
-    public func generate() -> GeneratorOf<Element>
+    public func generate() -> AnyGenerator<Element>
     {
         var generator = errors.generate()
-        return GeneratorOf { return generator.next() }
+        return anyGenerator { return generator.next() }
     }
 }
 
@@ -134,7 +118,7 @@ extension ErrorIO: CollectionType
     public var startIndex : Index { return errors.startIndex }
     public var endIndex   : Index { return errors.endIndex }
 
-    /** Retrieves the `NSError` at the specified `index`. */
+    /** Retrieves the `ErrorType` at the specified `index`. */
     public subscript(position:Index) -> Element {
         return errors[position]
     }
@@ -145,7 +129,7 @@ extension ErrorIO: CollectionType
 // MARK: - Error: ExtensibleCollectionType
 //__
 
-extension ErrorIO: ExtensibleCollectionType
+extension ErrorIO //: RangeReplaceableCollectionType
 {
     public func reserveCapacity(n: Index.Distance) {
         errors.reserveCapacity(n)
@@ -163,7 +147,7 @@ extension ErrorIO: ExtensibleCollectionType
         Element order is [bottom, ..., top], as if one were to iterate through the sequence in forward order, calling `stack.push(element)` on each element.
      */
     public func extend <S: SequenceType where S.Generator.Element == Element> (sequence: S) {
-        errors.extend(sequence)
+        errors.appendContentsOf(sequence)
     }
 }
 

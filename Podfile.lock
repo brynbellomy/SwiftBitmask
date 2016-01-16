@@ -1,13 +1,15 @@
 PODS:
-  - Funky (0.2.2):
-    - Regex (= 0.1.0)
-  - Regex (0.1.0)
+  - Funky (0.3.0):
+    - Regex (= 0.3.0)
+  - Regex (0.3.0)
 
 DEPENDENCIES:
-  - Funky (~> 0.2.2)
+  - Funky (= 0.3.0)
 
 SPEC CHECKSUMS:
-  Funky: d974c297d2ddfdf6ddc54a7c4b59b0c16ef7e465
-  Regex: 7eb28abf34ed5718a34baa474892b0ddc4efb384
+  Funky: ed6dbc079d41b3e5ad4e0cd87059b925b5641547
+  Regex: 6bfb554ad7d5b1be9cfc57ab1fe2fb6cee45a344
 
-COCOAPODS: 0.37.0.beta.1
+PODFILE CHECKSUM: 8d2e64a6b2ad084375feadb60b6f723a87344f87
+
+COCOAPODS: 1.0.0.beta.2

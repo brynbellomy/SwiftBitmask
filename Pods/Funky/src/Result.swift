@@ -1,4 +1,6 @@
+///
 /// Result
+/// LlamaKit
 ///
 /// Container for a successful value (T) or a failure with an NSError
 ///
@@ -8,7 +10,7 @@ import Foundation
 /// A success `Result` returning `value`
 /// This form is preferred to `Result.Success(Box(value))` because it
 // does not require dealing with `Box()`
-public func success<T,E>(value: T) -> Result<T,E> {
+public func success<T, E:ErrorType> (value: T) -> Result<T,E> {
   return .Success(Box(value))
 }
 
@@ -42,10 +44,10 @@ public func failure<T>(message: String, file: String = __FILE__, line: Int = __L
   return failure(defaultError(userInfo))
 }
 
-public func failure<T>(file: String = __FILE__, line: Int = __LINE__) -> Result<T,NSError> {
-  let userInfo: [NSObject : AnyObject] = [ErrorFileKey: file, ErrorLineKey: line]
-  return failure(defaultError(userInfo))
-}
+//public func failure<T>(file: String = __FILE__, line: Int = __LINE__) -> Result<T,NSError> {
+//  let userInfo: [NSObject : AnyObject] = [ErrorFileKey: file, ErrorLineKey: line]
+//  return failure(defaultError(userInfo))
+//}
 
 public func failure<T,E>(error: E) -> Result<T,E> {
   return .Failure(Box(error))
@@ -54,14 +56,14 @@ public func failure<T,E>(error: E) -> Result<T,E> {
 /// Construct a `Result` using a block which receives an error parameter.
 /// Expected to return non-nil for success.
 
-public func try<T>(f: (NSErrorPointer -> T?), file: String = __FILE__, line: Int = __LINE__) -> Result<T,NSError> {
+public func `try`<T>(f: (NSErrorPointer -> T?), file: String = __FILE__, line: Int = __LINE__) -> Result<T,NSError> {
   var error: NSError?
-  return f(&error).map(success) ?? failure(error ?? defaultError(file: file, line: line))
+  return f(&error).map(success) ?? failure(error ?? defaultError(file, line: line))
 }
 
-public func try(f: (NSErrorPointer -> Bool), file: String = __FILE__, line: Int = __LINE__) -> Result<(),NSError> {
+public func `try`(f: (NSErrorPointer -> Bool), file: String = __FILE__, line: Int = __LINE__) -> Result<(),NSError> {
   var error: NSError?
-  return f(&error) ? success(()) : failure(error ?? defaultError(file: file, line: line))
+  return f(&error) ? success(()) : failure(error ?? defaultError(file, line: line))
 }
 
 /// Container for a successful value (T) or a failure with an E
@@ -114,7 +116,7 @@ public enum Result<T,E> {
   }
 }
 
-extension Result: Printable {
+extension Result: CustomStringConvertible {
   public var description: String {
     switch self {
     case .Success(let box):
@@ -132,7 +134,7 @@ public func ??<T,E>(result: Result<T,E>, @autoclosure defaultValue:  () -> T) ->
   switch result {
   case .Success(let value):
     return value.unbox
-  case .Failure(let error):
+  case .Failure:
     return defaultValue()
   }
 }

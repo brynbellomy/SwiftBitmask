@@ -27,7 +27,7 @@ public func coalesce2
     <T, U, E: NSError>
     (arr: [(Result<T, E>, Result<U, E>)]) -> Result<[(T, U)], ErrorIO>
 {
-    let errorIO = arr |> reducer(ErrorIO()) { (var into, each) in
+    let errorIO = arr |> reducer(ErrorIO()) { (into, each) in
         let (left, right) = each
 
         if let error = left.error  { into <~ error }
@@ -39,8 +39,7 @@ public func coalesce2
         return errorIO.asResult()
     }
     else {
-        return arr  |> map‡ { ($0.0.value!, $0.1.value!) }
-                    |> success
+        return arr.map { ($0.0.value!, $0.1.value!) } |> success
     }
 }
 
@@ -48,14 +47,14 @@ public func coalesce2
 public func failure <T> (message: String, file: String = __FILE__, line: Int = __LINE__) -> Result<T, ErrorIO> {
 //    let err = ErrorIO.defaultError(message, file:file, line:line)
 //    let res: Result<T, ErrorIO> = err |> asResult
-    return ErrorIO.defaultError(message, file:file, line:line)
+    return ErrorIO.defaultError(message:message, file:file, line:line)
                   .asResult()
 }
 
 public func failure <T> (nserror:NSError, file: String = __FILE__, line: Int = __LINE__) -> Result<T, ErrorIO> {
 //    let err = ErrorIO.defaultError(message, file:file, line:line)
 //    let res: Result<T, ErrorIO> = err |> asResult
-    var err = ErrorIO()
+    let err = ErrorIO()
     err <~ nserror
     return err.asResult()
 }
