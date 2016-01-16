@@ -8,7 +8,7 @@ Pod::Spec.new do |s|
 
   s.ios.deployment_target = '8.0'
   s.osx.deployment_target = '10.10'
-  s.source_files = 'Classes/*.swift'
+  s.source_files = 'Source/*.swift'
   s.requires_arc = true
 
   s.dependency 'Funky', '0.3.0'
