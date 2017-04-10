@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import Funky
 
 
 ///
@@ -15,8 +14,8 @@ import Funky
 ///  
 /// For example: `bitmask |> asOptionSet([.First, .Second, .Third])`
 ///
-public func asOptionSet <T: IBitmaskRepresentable where T: Hashable>
-    (possibleOptions:Set<T>) (bitmask:Bitmask<T>) -> OptionSetView<T>
+public func asOptionSet <T: IBitmaskRepresentable>
+    (_ possibleOptions:Set<T>, _ bitmask:Bitmask<T>) -> OptionSetView<T> where T: Hashable
 {
     return OptionSetView(bitmask:bitmask, possibleOptions:possibleOptions)
 }
@@ -26,7 +25,7 @@ public func asOptionSet <T: IBitmaskRepresentable where T: Hashable>
     A representation of a finite set of options (or flags), some of which are set (flagged).
     A `Bitmask<T>` can be converted to an `OptionSetView<T>`.
  */
-public struct OptionSetView <T: IBitmaskRepresentable where T: Hashable>
+public struct OptionSetView <T: IBitmaskRepresentable> where T: Hashable
 {
     let bitmask: Bitmask<T>
     let possibleOptions: Set<T>
@@ -37,16 +36,14 @@ public struct OptionSetView <T: IBitmaskRepresentable where T: Hashable>
         bitmask = b
         possibleOptions = po
         
-        options = possibleOptions
-                    |> selectArray { b.isSet($0) }
-                    |> toSet
+        options = Set(possibleOptions.filter { b.isSet($0) })
     }
 
-    public func isSet(option:T) -> Bool {
+    public func isSet(_ option:T) -> Bool {
         return (bitmask & option).bitmaskValue == option.bitmaskValue
     }
 
-    public func areSet(options:T...) -> Bool {
+    public func areSet(_ options:T...) -> Bool {
         let otherBitmask = Bitmask(options)
         return (bitmask & otherBitmask).bitmaskValue == otherBitmask.bitmaskValue
     }
@@ -56,10 +53,10 @@ public struct OptionSetView <T: IBitmaskRepresentable where T: Hashable>
 // MARK: - OptionSetView: SequenceType
 //
 
-extension OptionSetView: SequenceType
+extension OptionSetView: Sequence
 {
-    public func generate() -> AnyGenerator<T> {
-        var generator = options.generate()
-        return anyGenerator { generator.next() }
+    public func makeIterator() -> AnyIterator<T> {
+        var generator = options.makeIterator()
+        return AnyIterator { generator.next() }
     }
 }

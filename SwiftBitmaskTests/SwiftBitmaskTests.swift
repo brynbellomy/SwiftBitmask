@@ -12,9 +12,9 @@ import SwiftBitmask
 
 private enum MonsterAttributes: UInt16, IBitmaskRepresentable
 {
-    case Big   = 1
-    case Ugly  = 2
-    case Scary = 4
+    case big   = 1
+    case ugly  = 2
+    case scary = 4
 
     var bitmaskValue:   UInt16  { return rawValue }
     init?(bitmaskValue: UInt16) { self.init(rawValue: bitmaskValue) }
@@ -23,7 +23,7 @@ private enum MonsterAttributes: UInt16, IBitmaskRepresentable
 
 class SwiftBitmaskTests: XCTestCase
 {
-    private let bitmask = MonsterAttributes.Ugly | .Scary
+    fileprivate let bitmask = MonsterAttributes.ugly | .scary
 
     func testRawTypes() {
         let rawBitmask = Bitmask<UInt16>(12)
@@ -31,28 +31,28 @@ class SwiftBitmaskTests: XCTestCase
     }
 
     func testSplatConstructor() {
-        let b = Bitmask(MonsterAttributes.Big, .Scary)
-        XCTAssert(b == MonsterAttributes.Big | MonsterAttributes.Scary)
+        let b = Bitmask(MonsterAttributes.big, .scary)
+        XCTAssert(b == MonsterAttributes.big | MonsterAttributes.scary)
     }
 
     func testArrayConstructor() {
-        let b = Bitmask([MonsterAttributes.Big, .Scary])
-        XCTAssert(b == MonsterAttributes.Big | .Scary)
+        let b = Bitmask([MonsterAttributes.big, .scary])
+        XCTAssert(b == MonsterAttributes.big | .scary)
     }
 
     func testPrefixOperatorConstructor()
     {
-        let singleValue = |MonsterAttributes.Ugly
-        XCTAssert(singleValue == MonsterAttributes.Ugly)
-        XCTAssert(|MonsterAttributes.Ugly == Bitmask(MonsterAttributes.Ugly))
+        let singleValue = |MonsterAttributes.ugly
+        XCTAssert(singleValue == MonsterAttributes.ugly)
+        XCTAssert(|MonsterAttributes.ugly == Bitmask(MonsterAttributes.ugly))
     }
 
     func testEquatable() {
-        XCTAssert(bitmask == MonsterAttributes.Ugly | .Scary)
+        XCTAssert(bitmask == MonsterAttributes.ugly | .scary)
     }
 
     func testComparable() {
-        let other = MonsterAttributes.Big | .Scary
+        let other = MonsterAttributes.big | .scary
         XCTAssert((bitmask <  other) == (bitmask.bitmaskValue <  other.bitmaskValue))
         XCTAssert((bitmask >  other) == (bitmask.bitmaskValue >  other.bitmaskValue))
         XCTAssert((bitmask <= other) == (bitmask.bitmaskValue <= other.bitmaskValue))
@@ -60,52 +60,52 @@ class SwiftBitmaskTests: XCTestCase
     }
 
     func testIsSet() {
-        XCTAssertTrue(bitmask.isSet(.Ugly))
-        XCTAssertTrue(bitmask.isSet(.Scary))
-        XCTAssertFalse(bitmask.isSet(.Big))
+        XCTAssertTrue(bitmask.isSet(.ugly))
+        XCTAssertTrue(bitmask.isSet(.scary))
+        XCTAssertFalse(bitmask.isSet(.big))
     }
     
     func testAreSet() {
-        XCTAssertTrue(bitmask.areSet(.Ugly, .Scary))
-        XCTAssertFalse(bitmask.areSet(.Ugly, .Big))
+        XCTAssertTrue(bitmask.areSet(.ugly, .scary))
+        XCTAssertFalse(bitmask.areSet(.ugly, .big))
     }
 
     func testLogicalOr() {
-        XCTAssert(bitmask.bitmaskValue == MonsterAttributes.Ugly.bitmaskValue | MonsterAttributes.Scary.bitmaskValue)
+        XCTAssert(bitmask.bitmaskValue == MonsterAttributes.ugly.bitmaskValue | MonsterAttributes.scary.bitmaskValue)
     }
 
     func testLogicalAnd() {
-        let other = MonsterAttributes.Ugly
+        let other = MonsterAttributes.ugly
         XCTAssert((bitmask & other) == other)
         XCTAssert((bitmask & other).bitmaskValue == bitmask.bitmaskValue & other.bitmaskValue)
     }
 
     func testLogicalXor() {
-        let other = MonsterAttributes.Ugly
-        XCTAssert(bitmask ^ other == MonsterAttributes.Scary)
+        let other = MonsterAttributes.ugly
+        XCTAssert(bitmask ^ other == MonsterAttributes.scary)
         XCTAssert((bitmask ^ other).bitmaskValue == bitmask.bitmaskValue ^ other.bitmaskValue)
     }
 
     func testLogicalNot() {
-        XCTAssert((~bitmask) == ~(MonsterAttributes.Ugly | .Scary))
+        XCTAssert((~bitmask) == ~(MonsterAttributes.ugly | .scary))
     }
 
     func testNilLiteralConvertible() {
-        XCTAssert(bitmask &  MonsterAttributes.Scary != nil)
-        XCTAssert(bitmask & |MonsterAttributes.Scary != nil)
+        XCTAssert(bitmask &  MonsterAttributes.scary != nil)
+        XCTAssert(bitmask & |MonsterAttributes.scary != nil)
     }
 
     func testBooleanType() {
-        XCTAssert(bitmask &  MonsterAttributes.Scary)
-        XCTAssert(bitmask & |MonsterAttributes.Scary)
+        XCTAssert((bitmask &  MonsterAttributes.scary).boolValue)
+        XCTAssert((bitmask & |MonsterAttributes.scary).boolValue)
     }
 
     func testPatternMatchingOperator() {
         // Implements the pattern matching operator
-        XCTAssert(bitmask ~=  MonsterAttributes.Scary | .Big)
-        XCTAssert(bitmask ~=  MonsterAttributes.Scary)
-        XCTAssert(bitmask ~= |MonsterAttributes.Scary)
-        XCTAssert((bitmask ~= |MonsterAttributes.Big) == false)
+        XCTAssert(bitmask ~=  MonsterAttributes.scary | .big)
+        XCTAssert(bitmask ~=  MonsterAttributes.scary)
+        XCTAssert(bitmask ~= |MonsterAttributes.scary)
+        XCTAssert((bitmask ~= |MonsterAttributes.big) == false)
     }
 }
 

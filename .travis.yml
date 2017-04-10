@@ -1,9 +1,9 @@
 
 # foobar
 language: objective-c
-osx_image: xcode7.2
+osx_image: xcode8.2
 script:
-    - xctool build test GCC_INSTRUMENT_PROGRAM_FLOW_ARCS=YES GCC_GENERATE_TEST_COVERAGE_FILES=YES
+    - xcodebuild -project SwiftBitmask.xcodeproj -scheme SwiftBitmask GCC_INSTRUMENT_PROGRAM_FLOW_ARCS=YES GCC_GENERATE_TEST_COVERAGE_FILES=YES
+    - xctool run-tests
 after_success:
     - bash <(curl -s https://codecov.io/bash)
-

@@ -1,6 +1,0 @@
-framework module Pods_SwiftBitmask {
-  umbrella header "Pods-SwiftBitmask-umbrella.h"
-
-  export *
-  module * { export * }
-}

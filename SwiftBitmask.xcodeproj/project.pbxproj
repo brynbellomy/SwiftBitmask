@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		6874609D92109F50B0D56EB3 /* Pods_SwiftBitmask.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2C2B6D88709CAEE03D1A309B /* Pods_SwiftBitmask.framework */; };
 		C55045091A3F49110057378F /* SwiftBitmask.h in Headers */ = {isa = PBXBuildFile; fileRef = C55045081A3F49110057378F /* SwiftBitmask.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C550450F1A3F49110057378F /* SwiftBitmask.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C55045031A3F49110057378F /* SwiftBitmask.framework */; };
 		C55045161A3F49110057378F /* SwiftBitmaskTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C55045151A3F49110057378F /* SwiftBitmaskTests.swift */; };
@@ -28,10 +27,6 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		2C2B6D88709CAEE03D1A309B /* Pods_SwiftBitmask.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SwiftBitmask.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		6AB4D02AAE851F7A70D35ABC /* Pods-SwiftBitmask.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SwiftBitmask.debug.xcconfig"; path = "Pods/Target Support Files/Pods-SwiftBitmask/Pods-SwiftBitmask.debug.xcconfig"; sourceTree = "<group>"; };
-		8E7E860EDC9D322BAB24E9C5 /* Pods.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		C34EA2522D89A1F8B56E374B /* Pods-SwiftBitmask.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SwiftBitmask.release.xcconfig"; path = "Pods/Target Support Files/Pods-SwiftBitmask/Pods-SwiftBitmask.release.xcconfig"; sourceTree = "<group>"; };
 		C55045031A3F49110057378F /* SwiftBitmask.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SwiftBitmask.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C55045071A3F49110057378F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		C55045081A3F49110057378F /* SwiftBitmask.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SwiftBitmask.h; sourceTree = "<group>"; };
@@ -49,7 +44,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6874609D92109F50B0D56EB3 /* Pods_SwiftBitmask.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -64,20 +58,9 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		86CD8F47AC19928DD4252C57 /* Pods */ = {
-			isa = PBXGroup;
-			children = (
-				6AB4D02AAE851F7A70D35ABC /* Pods-SwiftBitmask.debug.xcconfig */,
-				C34EA2522D89A1F8B56E374B /* Pods-SwiftBitmask.release.xcconfig */,
-			);
-			name = Pods;
-			sourceTree = "<group>";
-		};
 		8A2412840B6E8D6E00785617 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				8E7E860EDC9D322BAB24E9C5 /* Pods.framework */,
-				2C2B6D88709CAEE03D1A309B /* Pods_SwiftBitmask.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -89,7 +72,6 @@
 				C55045051A3F49110057378F /* SwiftBitmask */,
 				C55045121A3F49110057378F /* SwiftBitmaskTests */,
 				C55045041A3F49110057378F /* Products */,
-				86CD8F47AC19928DD4252C57 /* Pods */,
 				8A2412840B6E8D6E00785617 /* Frameworks */,
 			);
 			sourceTree = "<group>";
@@ -166,12 +148,10 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = C55045191A3F49110057378F /* Build configuration list for PBXNativeTarget "SwiftBitmask" */;
 			buildPhases = (
-				3EDCD1E812D8C4CBA8D8338C /* Check Pods Manifest.lock */,
 				C55044FE1A3F49110057378F /* Sources */,
 				C55044FF1A3F49110057378F /* Frameworks */,
 				C55045001A3F49110057378F /* Headers */,
 				C55045011A3F49110057378F /* Resources */,
-				5624ECB8F73F70FB50A8131E /* Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -208,14 +188,16 @@
 			attributes = {
 				LastSwiftMigration = 0720;
 				LastSwiftUpdateCheck = 0710;
-				LastUpgradeCheck = 0720;
+				LastUpgradeCheck = 0820;
 				ORGANIZATIONNAME = "bryn austin bellomy";
 				TargetAttributes = {
 					C55045021A3F49110057378F = {
 						CreatedOnToolsVersion = 6.1.1;
+						LastSwiftMigration = 0820;
 					};
 					C550450D1A3F49110057378F = {
 						CreatedOnToolsVersion = 6.1.1;
+						LastSwiftMigration = 0820;
 					};
 				};
 			};
@@ -253,39 +235,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
-
-/* Begin PBXShellScriptBuildPhase section */
-		3EDCD1E812D8C4CBA8D8338C /* Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "Check Pods Manifest.lock";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
-			showEnvVarsInLog = 0;
-		};
-		5624ECB8F73F70FB50A8131E /* Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-SwiftBitmask/Pods-SwiftBitmask-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		C55044FE1A3F49110057378F /* Sources */ = {
@@ -331,8 +280,10 @@
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
@@ -341,6 +292,7 @@
 				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
@@ -376,8 +328,10 @@
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = YES;
@@ -386,6 +340,7 @@
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNDECLARED_SELECTOR = YES;
@@ -395,6 +350,7 @@
 				MACOSX_DEPLOYMENT_TARGET = 10.10;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = macosx;
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
 			};
@@ -402,7 +358,6 @@
 		};
 		C550451A1A3F49110057378F /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 6AB4D02AAE851F7A70D35ABC /* Pods-SwiftBitmask.debug.xcconfig */;
 			buildSettings = {
 				COMBINE_HIDPI_IMAGES = YES;
 				DEFINES_MODULE = YES;
@@ -416,12 +371,12 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "com.illumntr.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 3.0;
 			};
 			name = Debug;
 		};
 		C550451B1A3F49110057378F /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = C34EA2522D89A1F8B56E374B /* Pods-SwiftBitmask.release.xcconfig */;
 			buildSettings = {
 				COMBINE_HIDPI_IMAGES = YES;
 				DEFINES_MODULE = YES;
@@ -435,6 +390,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "com.illumntr.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 3.0;
 			};
 			name = Release;
 		};
@@ -454,6 +410,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.illumntr.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
 			};
 			name = Debug;
 		};
@@ -469,6 +426,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.illumntr.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
 			};
 			name = Release;
 		};
