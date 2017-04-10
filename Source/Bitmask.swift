@@ -11,23 +11,23 @@ import Foundation
 
 public protocol IBitmaskRepresentable: Equatable, Hashable
 {
-    typealias BitmaskRawType: IBitmaskRawType
+    associatedtype BitmaskRawType: IBitmaskRawType
     var bitmaskValue: BitmaskRawType { get }
 }
 
 
-public protocol IBitmaskRawType: BitwiseOperationsType, Equatable, Comparable
+public protocol IBitmaskRawType: BitwiseOperations, Equatable, Comparable
 {
     init(_ v:Int)
     var integerValue: Int { get set }
 }
 
 
-public struct Bitmask <T: IBitmaskRepresentable> : BitwiseOperationsType
+public struct Bitmask <T: IBitmaskRepresentable> : BitwiseOperations
 {
     public typealias BitmaskRawType = T.BitmaskRawType
 
-    public private(set) var bitmaskValue: BitmaskRawType = BitmaskRawType.allZeros
+    public fileprivate(set) var bitmaskValue: BitmaskRawType = BitmaskRawType.allZeros
     
     public var hashValue: Int { return bitmaskValue.integerValue }
 
@@ -43,32 +43,32 @@ public struct Bitmask <T: IBitmaskRepresentable> : BitwiseOperationsType
     public init(_ val: Bitmask<T>...)           { setValue(val) }
 
 
-    public mutating func setValue(val: T)                { bitmaskValue = val.bitmaskValue }
-    public mutating func setValue(val: T.BitmaskRawType) { bitmaskValue = val }
+    public mutating func setValue(_ val: T)                { bitmaskValue = val.bitmaskValue }
+    public mutating func setValue(_ val: T.BitmaskRawType) { bitmaskValue = val }
 
-    public mutating func setValue(val: [T]) {
+    public mutating func setValue(_ val: [T]) {
         setValue(
             val.map { $0.bitmaskValue }.reduce(T.BitmaskRawType.allZeros) { $0 | $1 }
         )
     }
 
-    public mutating func setValue(val: [T.BitmaskRawType]) {
+    public mutating func setValue(_ val: [T.BitmaskRawType]) {
         setValue(
             val.reduce(T.BitmaskRawType.allZeros) { $0 | $1 }
         )
     }
 
-    public mutating func setValue(val: [Bitmask<T>]) {
+    public mutating func setValue(_ val: [Bitmask<T>]) {
         setValue(
             val.map { $0.bitmaskValue }
         )
     }
 
-    public func isSet(val:T) -> Bool {
+    public func isSet(_ val:T) -> Bool {
         return (self & val) == val
     }
     
-    public func areSet(options:T...) -> Bool {
+    public func areSet(_ options:T...) -> Bool {
         let otherBitmask = Bitmask(options)
         return (self & otherBitmask).bitmaskValue == otherBitmask.bitmaskValue
     }
@@ -120,7 +120,7 @@ public func < <T> (lhs:Bitmask<T>, rhs:Bitmask<T>) -> Bool {
 // MARK: - Bitmask: NilLiteralConvertible -
 //
 
-extension Bitmask: NilLiteralConvertible
+extension Bitmask: ExpressibleByNilLiteral
 {
     public init(nilLiteral: ())
     {
@@ -134,7 +134,7 @@ extension Bitmask: NilLiteralConvertible
 // MARK: - Bitmask: BooleanType -
 //
 
-extension Bitmask: BooleanType
+extension Bitmask
 {
     /** For bitmasks, `boolValue` is `true` as long as any bit is set. */
     public var boolValue: Bool { return !isAllZeros }
@@ -147,7 +147,7 @@ extension Bitmask: BooleanType
 // MARK: - Quick instantiation prefix operator
 //
 
-prefix operator | {}
+prefix operator |
 
 public prefix func | <T: IBitmaskRepresentable> (val:T) -> Bitmask<T> {
     return Bitmask<T>(val)
@@ -164,8 +164,8 @@ public func | <T: IBitmaskRepresentable> (lhs:Bitmask<T>, rhs:T)          -> Bit
 public func | <T: IBitmaskRepresentable> (lhs:T, rhs:Bitmask<T>)          -> Bitmask<T> { return rhs | lhs }
 public func | <T: IBitmaskRepresentable> (lhs:T, rhs:T)                   -> Bitmask<T> { return Bitmask(lhs.bitmaskValue | rhs.bitmaskValue) }
 
-public func |= <T: IBitmaskRepresentable> (inout lhs:Bitmask<T>, rhs:T)          { lhs.setValue(lhs.bitmaskValue | rhs.bitmaskValue) }
-public func |= <T: IBitmaskRepresentable> (inout lhs:Bitmask<T>, rhs:Bitmask<T>) { lhs.setValue(lhs.bitmaskValue | rhs.bitmaskValue) }
+public func |= <T: IBitmaskRepresentable> (lhs:inout Bitmask<T>, rhs:T)          { lhs.setValue(lhs.bitmaskValue | rhs.bitmaskValue) }
+public func |= <T: IBitmaskRepresentable> (lhs:inout Bitmask<T>, rhs:Bitmask<T>) { lhs.setValue(lhs.bitmaskValue | rhs.bitmaskValue) }
 
 
 
@@ -178,8 +178,8 @@ public func & <T: IBitmaskRepresentable> (lhs:Bitmask<T>, rhs:T)          -> Bit
 public func & <T: IBitmaskRepresentable> (lhs:T,          rhs:Bitmask<T>) -> Bitmask<T> { return rhs & lhs }
 public func & <T: IBitmaskRepresentable> (lhs:T, rhs:T)                   -> Bitmask<T> { return Bitmask(lhs.bitmaskValue & rhs.bitmaskValue) }
 
-public func &= <T: IBitmaskRepresentable> (inout lhs:Bitmask<T>, rhs:T)          { lhs.setValue(lhs.bitmaskValue & rhs.bitmaskValue) }
-public func &= <T: IBitmaskRepresentable> (inout lhs:Bitmask<T>, rhs:Bitmask<T>) { lhs.setValue(lhs.bitmaskValue & rhs.bitmaskValue) }
+public func &= <T: IBitmaskRepresentable> (lhs:inout Bitmask<T>, rhs:T)          { lhs.setValue(lhs.bitmaskValue & rhs.bitmaskValue) }
+public func &= <T: IBitmaskRepresentable> (lhs:inout Bitmask<T>, rhs:Bitmask<T>) { lhs.setValue(lhs.bitmaskValue & rhs.bitmaskValue) }
 
 
 
@@ -192,8 +192,8 @@ public func ^ <T: IBitmaskRepresentable> (lhs:Bitmask<T>, rhs:T)          -> Bit
 public func ^ <T: IBitmaskRepresentable> (lhs:T, rhs:Bitmask<T>)          -> Bitmask<T> { return rhs ^ lhs }
 public func ^ <T: IBitmaskRepresentable> (lhs:T, rhs:T)                   -> Bitmask<T> { return Bitmask(lhs.bitmaskValue ^ rhs.bitmaskValue) }
 
-public func ^= <T: IBitmaskRepresentable> (inout lhs:Bitmask<T>, rhs:T)          { lhs.setValue(lhs.bitmaskValue ^ rhs.bitmaskValue) }
-public func ^= <T: IBitmaskRepresentable> (inout lhs:Bitmask<T>, rhs:Bitmask<T>) { lhs.setValue(lhs.bitmaskValue ^ rhs.bitmaskValue) }
+public func ^= <T: IBitmaskRepresentable> (lhs:inout Bitmask<T>, rhs:T)          { lhs.setValue(lhs.bitmaskValue ^ rhs.bitmaskValue) }
+public func ^= <T: IBitmaskRepresentable> (lhs:inout Bitmask<T>, rhs:Bitmask<T>) { lhs.setValue(lhs.bitmaskValue ^ rhs.bitmaskValue) }
 
 
 

@@ -12,9 +12,9 @@ import SwiftBitmask
 
 private enum MonsterAttributes: UInt16, IBitmaskRepresentable
 {
-    case Big   = 1
-    case Ugly  = 2
-    case Scary = 4
+    case big   = 1
+    case ugly  = 2
+    case scary = 4
 
     var bitmaskValue:   UInt16  { return rawValue }
     init?(bitmaskValue: UInt16) { self.init(rawValue: bitmaskValue) }
@@ -23,7 +23,7 @@ private enum MonsterAttributes: UInt16, IBitmaskRepresentable
 
 class SwiftBitmaskTests: XCTestCase
 {
-    private let bitmask = MonsterAttributes.Ugly | .Scary
+    fileprivate let bitmask = MonsterAttributes.Ugly | .Scary
 
     func testRawTypes() {
         let rawBitmask = Bitmask<UInt16>(12)
@@ -75,13 +75,13 @@ class SwiftBitmaskTests: XCTestCase
     }
 
     func testLogicalAnd() {
-        let other = MonsterAttributes.Ugly
+        let other = MonsterAttributes.ugly
         XCTAssert((bitmask & other) == other)
         XCTAssert((bitmask & other).bitmaskValue == bitmask.bitmaskValue & other.bitmaskValue)
     }
 
     func testLogicalXor() {
-        let other = MonsterAttributes.Ugly
+        let other = MonsterAttributes.ugly
         XCTAssert(bitmask ^ other == MonsterAttributes.Scary)
         XCTAssert((bitmask ^ other).bitmaskValue == bitmask.bitmaskValue ^ other.bitmaskValue)
     }

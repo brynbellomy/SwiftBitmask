@@ -23,18 +23,18 @@ public protocol IAutoBitmaskable: Equatable
  */
 public struct AutoBitmask
 {
-    public static func autoBitmaskValueFor <T: protocol<IAutoBitmaskable, IBitmaskRepresentable>>
-        (autoBitmaskable:T) -> T.BitmaskRawType
+    public static func autoBitmaskValueFor <T: (IAutoBitmaskable & IBitmaskRepresentable)>
+        (_ autoBitmaskable:T) -> T.BitmaskRawType
     {
-        if let index = T.autoBitmaskValues.indexOf(autoBitmaskable) {
+        if let index = T.autoBitmaskValues.index(of: autoBitmaskable) {
             return T.BitmaskRawType(1 << index)
         }
         else { preconditionFailure("Attempted to call autoBitmaskValueFor(_:) with a non-bitmaskable value of T.") }
     }
 
 
-    public static func autoValueFromBitmask <T: protocol<IAutoBitmaskable, IBitmaskRepresentable>>
-        (bitmaskValue:T.BitmaskRawType) -> T
+    public static func autoValueFromBitmask <T: (IAutoBitmaskable & IBitmaskRepresentable)>
+        (_ bitmaskValue:T.BitmaskRawType) -> T
     {
         let index = T.autoBitmaskValues.index { $0.bitmaskValue == bitmaskValue }
         if let index = index {

@@ -28,13 +28,13 @@ class AutoBitmaskTests: XCTestCase
 {
     func testAutoBitmaskAlgorithmicValues()
     {
-        var index = MonsterAttributes.autoBitmaskValues.indexOf(MonsterAttributes.Big)!
+        var index = MonsterAttributes.autoBitmaskValues.index(of: MonsterAttributes.Big)!
         XCTAssert(MonsterAttributes.Big.bitmaskValue == UInt16(1 << index))
 
-        index = MonsterAttributes.autoBitmaskValues.indexOf(MonsterAttributes.Ugly)!
+        index = MonsterAttributes.autoBitmaskValues.index(of: MonsterAttributes.Ugly)!
         XCTAssert(MonsterAttributes.Ugly.bitmaskValue == UInt16(1 << index))
 
-        index = MonsterAttributes.autoBitmaskValues.indexOf(MonsterAttributes.Scary)!
+        index = MonsterAttributes.autoBitmaskValues.index(of: MonsterAttributes.Scary)!
         XCTAssert(MonsterAttributes.Scary.bitmaskValue == UInt16(1 << index))
     }
 
