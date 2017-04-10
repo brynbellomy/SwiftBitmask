@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import Funky
 
 
 public protocol IAutoBitmaskable: Equatable
@@ -37,7 +36,7 @@ public struct AutoBitmask
     public static func autoValueFromBitmask <T: protocol<IAutoBitmaskable, IBitmaskRepresentable>>
         (bitmaskValue:T.BitmaskRawType) -> T
     {
-        let index = findWhere(T.autoBitmaskValues) { $0.bitmaskValue == bitmaskValue }
+        let index = T.autoBitmaskValues.index { $0.bitmaskValue == bitmaskValue }
         if let index = index {
             return T.autoBitmaskValues[index]
         }

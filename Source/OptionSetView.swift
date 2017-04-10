@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import Funky
 
 
 ///
@@ -37,9 +36,7 @@ public struct OptionSetView <T: IBitmaskRepresentable where T: Hashable>
         bitmask = b
         possibleOptions = po
         
-        options = possibleOptions
-                    |> selectArray { b.isSet($0) }
-                    |> toSet
+        options = Set(possibleOptions.filter { b.isSet($0) })
     }
 
     public func isSet(option:T) -> Bool {

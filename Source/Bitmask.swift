@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import Funky
 
 
 public protocol IBitmaskRepresentable: Equatable, Hashable
@@ -49,13 +48,13 @@ public struct Bitmask <T: IBitmaskRepresentable> : BitwiseOperationsType
 
     public mutating func setValue(val: [T]) {
         setValue(
-            val.map { $0.bitmaskValue } |> reducer(T.BitmaskRawType.allZeros) { $0 | $1 }
+            val.map { $0.bitmaskValue }.reduce(T.BitmaskRawType.allZeros) { $0 | $1 }
         )
     }
 
     public mutating func setValue(val: [T.BitmaskRawType]) {
         setValue(
-            val |> reducer(T.BitmaskRawType.allZeros) { $0 | $1 }
+            val.reduce(T.BitmaskRawType.allZeros) { $0 | $1 }
         )
     }
 
