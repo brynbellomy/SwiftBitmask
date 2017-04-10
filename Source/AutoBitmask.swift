@@ -23,7 +23,7 @@ public protocol IAutoBitmaskable: Equatable
  */
 public struct AutoBitmask
 {
-    public static func autoBitmaskValueFor <T: (IAutoBitmaskable & IBitmaskRepresentable)>
+    public static func autoBitmaskValueFor <T: IAutoBitmaskable & IBitmaskRepresentable>
         (_ autoBitmaskable:T) -> T.BitmaskRawType
     {
         if let index = T.autoBitmaskValues.index(of: autoBitmaskable) {
@@ -33,7 +33,7 @@ public struct AutoBitmask
     }
 
 
-    public static func autoValueFromBitmask <T: (IAutoBitmaskable & IBitmaskRepresentable)>
+    public static func autoValueFromBitmask <T: IAutoBitmaskable & IBitmaskRepresentable>
         (_ bitmaskValue:T.BitmaskRawType) -> T
     {
         let index = T.autoBitmaskValues.index { $0.bitmaskValue == bitmaskValue }

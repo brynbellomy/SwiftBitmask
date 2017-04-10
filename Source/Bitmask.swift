@@ -39,7 +39,7 @@ public struct Bitmask <T: IBitmaskRepresentable> : BitwiseOperations
     public init(_ val: [T])                     { setValue(val) }
     public init(_ val: T...)                    { setValue(val) }
     public init(_ val: [T.BitmaskRawType])      { setValue(val) }
-    public init(_ val: T.BitmaskRawType...)     { setValue(val) }
+    public init(_ val1: T.BitmaskRawType, _ val2: T.BitmaskRawType, _ valRest: T.BitmaskRawType...) { setValue([ val1, val2 ] + valRest) }
     public init(_ val: Bitmask<T>...)           { setValue(val) }
 
 
