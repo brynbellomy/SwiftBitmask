@@ -1,5 +1,5 @@
 [
-  "-workspace", "SwiftBitmask.xcworkspace",
+  "-project", "SwiftBitmask.xcodeproj",
   "-scheme", "SwiftBitmask",
   "-configuration", "Debug"
 ]
